@@ -1,0 +1,19 @@
+
+gcc -o unshare1  unshare1.c
+sudo ./unshare1
+
+gcc -o clone1 clone1.c
+sudo ./clone1
+
+gcc -o utsname utsname.c
+./utsname
+
+gcc -o clone2  clone2.c
+sudo ./clone2
+
+gcc -o unshare2  unshare2.c ; sudo ./unshare2
+gcc -o unshare3  unshare3.c ; sudo ./unshare3
+
+gcc -o demo_userns  demo_userns.c  -lcap
+gcc -o setns1       setns1.c
+

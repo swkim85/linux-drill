@@ -1,6 +1,4 @@
 
-gcc -o unshare1  unshare1.c
-sudo ./unshare1
 
 #####################################
 # lxc
