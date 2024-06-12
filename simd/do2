@@ -10,3 +10,14 @@ gcc  -march=native    -g  -o bf16ex.o -c bf16ex.c  --save-temps
 gcc  -static -o bf16ex  bf16ex.o  rdtsc.o  -Wl,-Map=bf16ex.map
 ./bf16ex
 
+# gdb -ex "break main" -ex "run" -ex "set pagination off"  bf16ex
+
+g++ -g -static -o vpmaddwd vpmaddwd.cpp  -march=native
+./vpmaddwd
+
+ g++ -g -static -o vpaddd vpaddd.cpp -march=native
+./vpaddd
+
+g++ -g -static  -o vpdpwssd  vpdpwssd.cpp  -march=native
+./vpdpwssd
+
