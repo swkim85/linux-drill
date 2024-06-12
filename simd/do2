@@ -1,0 +1,12 @@
+
+gcc  -mavx  -g  -o hello_avx.o  -c hello_avx.c 
+gcc  -static -o hello_avx  hello_avx.o  rdtsc.o
+./hello_avx
+
+gcc -o mmsize mmsize.c
+./mmsize 
+
+gcc  -march=native    -g  -o bf16ex.o -c bf16ex.c  --save-temps
+gcc  -static -o bf16ex  bf16ex.o  rdtsc.o  -Wl,-Map=bf16ex.map
+./bf16ex
+

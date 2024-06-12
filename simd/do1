@@ -1,0 +1,26 @@
+
+gcc -g -o cpuid cpuid.c
+./cpuid 
+
+cpuid -l 0
+cpuid -1 -l 7 | grep AMX
+
+
+gcc -o sleeptime  sleeptime.c
+./sleeptime 
+grep "cpu MHz" /proc/cpuinfo 
+
+gcc -o bfloatsum  bfloatsum.c
+./bfloatsum 
+
+gcc -o ops  ops.c
+./ops  1000000000
+
+
+
+gcc -o rdtsc.o  -c rdtsc.c
+gcc -o opsth.o  -c opsth.c
+gcc -static -o  opsth  rdtsc.o opsth.o
+
+./opsth  100000000  8
+
