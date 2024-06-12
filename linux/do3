@@ -1,0 +1,36 @@
+
+
+gcc -m32 -o tracer1.o -c  tracer1.c
+gcc -m32 -o tracer1   tracer1.o
+gcc -m32 -o tracee_shared  traced_helloworld.c
+
+file  tracee_shared  
+./tracer1  tracee_shared
+
+gcc -m32 -static -o tracee_static  traced_helloworld.c
+
+file tracee_static
+./tracer1  tracee_static
+
+
+nasm -f elf -o tracee_hello.o tracee_hello.asm 
+ld -m elf_i386 -s tracee_hello.o -o tracee_asm
+file tracee_asm
+./tracee_asm 
+./tracer1   tracee_asm
+
+gcc -m32 -o tracer2  tracer2.c
+./tracer2  tracee_static
+
+
+
+
+gcc -m64 -o tracer1  tracer1.c
+gcc -m64 -o tracer2  tracer2.c
+gcc -m64 -o tracee_shared  traced_helloworld.c
+file tracee_shared  
+nasm -f elf64 -o tracee_hello.o tracee_hello.asm 
+ld -m elf_x86_64  -s tracee_hello.o -o tracee_asm64
+file tracee_asm64
+./tracer2 tracee_asm64
+

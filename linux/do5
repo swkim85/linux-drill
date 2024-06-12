@@ -1,0 +1,7 @@
+
+dwarfdump  main_static
+
+gcc -g -c main.c -o main.o -gsplit-dwarf
+objdump -h --wide main.dwo
+
+

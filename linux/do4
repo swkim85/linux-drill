@@ -1,0 +1,25 @@
+
+gcc -m32 -g -o breakpoint32  breakpoint.c
+./breakpoint32
+
+nasm -f elf  -o tracee_break32.o  tracee_break32.asm
+ld -m elf_i386  -s tracee_break32.o   -o tracee_break_asm32
+file ./tracee_break_asm32
+./tracee_break_asm32
+
+
+gcc -m32 -o tracer3 -DTARGETADDRESS=0x8049016  tracer3.c
+./tracer3  tracee_break_asm32
+
+gcc -m32 -o tracer4  -DTARGETADDRESS=0x8049016   tracer4.c
+./tracer4 tracee_break_asm32
+
+
+gcc -m32 -static -O0 -o tracee_break_c32  tracee_break.c
+./tracee_break_c32
+
+
+gcc -g -m32 -o tracer4 -DTARGETADDRESS=0x8049d1f  tracer4.c
+./tracer4 tracee_break_c32
+
+

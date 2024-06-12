@@ -1,0 +1,15 @@
+
+gcc -o dlmain  dlmain.c -ldl 
+./dlmain 
+
+gcc -c -Wall -Werror -fpic cosine.c
+gcc -shared -o libm.so.6  cosine.o
+LD_LIBRARY_PATH=.   ./dlmain
+
+
+ps ax | grep dlmain
+cat /proc/13645/maps
+
+strace ./dlmain
+
+

@@ -3,3 +3,28 @@ ar -crs libfoo.a  foo.o
 ar -t libfoo.a
 file libfoo.a 
 
+gcc -g  -o main.o  -c main.c  
+gcc     -o main_nodebug.o  -c main.c  
+
+gcc -static -o main_static  main.o  -lfoo -L .  -Wl,-Map=main_static.map 
+file main_static
+./main_static
+
+gcc -c -Wall -Werror -fpic foo.c
+gcc -shared -o libfoo.so foo.o
+file libfoo.so 
+
+gcc -o main_shared  main.o -lfoo
+gcc -o main_shared  main.o -lfoo -L . -g  -Wl,-Map=main_shared.map
+file main_shared
+
+export LD_LIBRARY_PATH=. ;  ./main_shared
+
+ldd main_static
+ldd -v main_shared
+
+unset LD_LIBRARY_PATH
+gcc -Wl,-rpath=/home/ubuntu/lib  -o main_shared2  -save-temps  main.c -lfoo -L .
+readelf -d main_shared2 | grep -i runpath
+
+

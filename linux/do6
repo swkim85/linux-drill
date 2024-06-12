@@ -1,0 +1,17 @@
+
+gcc -Wall -pg -c test_gprof.c --save-temps 
+gcc -Wall -pg -c test_gprof_new.c --save-temps 
+gcc -o test_gprof  -pg test_gprof.o test_gprof_new.o
+
+grep mcount *.s
+
+rm -f gmon.out ; time  ./test_gprof
+file gmon.out
+gprof test_gprof gmon.out > analysis.txt
+cat analysis.txt
+
+gcc -pg -o fibonacci  fibonacci.c
+time ./fibonacci
+gprof fibonacci  gmon.out  > analysis2.txt
+
+
