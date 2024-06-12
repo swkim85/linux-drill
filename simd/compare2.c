@@ -2,28 +2,21 @@
 #include <stdio.h>
 
 int main() {
-  __m512 vec_a = _mm512_set_ps(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
+  __m512 vec_a = _mm512_set_ps(1,2,3,4, 5,6,7,8, 1,2,3,4, 5,6,7,8);
   __m512 vec_b = _mm512_set_ps(3,3,3,3, 3,3,3,3, 3,3,3,3, 3,3,3,3);
-  //float mem[16] __attribute__((aligned(64)));
-  //_mm512_store_ps(mem, mem_vals);
 
-  __mmask16 k2 = 0xFFFF;
-  __mmask16 k3;
+  __mmask16 mask1 = 0xFF00;
+  __mmask16 mask2;
 
-/*
-  __asm__ volatile ( "vcmpgtps 0xc0(%1), %2, %0 %{%3%}"
-    : "=k" (k3)
-    : "r"(mem), "x"(zmm0), "k"(k2)
-  );
-*/
-
-  __asm__ volatile ( "vcmpltps %[value_b], %[value_zmm0], %[value_k3] %{%%k2%}"
-    : [value_k3] "=m" (k3)
-    : [value_b] "m"(vec_b), [value_zmm0] "r"(vec_a), "r"(k2)
+// vec_a가 vec_b 보다 작은지 비교, mask1에 의해서 상위 8개 요소만 비교대상으로함
+  __asm__ volatile ( "vcmpltps %[value_b], %[value_a], %[mask2]%{%[mask1]%}"
+    : [mask2] "=Yk" (mask2)
+    : [value_b] "x"(vec_b),
+      [value_a] "x"(vec_a),
+      [mask1] "Yk" (mask1)
   );
 
-
-  printf("(k3 mask): 0x%04x\n", k3);
+  printf("(mask2): 0x%04x\n", mask2);
   return 0;
 }
 

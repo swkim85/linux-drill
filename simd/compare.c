@@ -1,4 +1,4 @@
-// mask.c
+// compare.c
 #include <immintrin.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -12,9 +12,12 @@ void print_m512i(__m512 vec) {
   printf("\n");
 }
 int main() {
-  float a[16] __attribute__((aligned(64))) = { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16 };
-  float b[16] __attribute__((aligned(64))) = { 16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1 };
-  float c[16] __attribute__((aligned(64))) = { 8,8,8,8, 0,0,0,0, 0,0,0,0, 8,8,8,8 };
+  float a[16] __attribute__((aligned(64)))
+     = { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16 };
+  float b[16] __attribute__((aligned(64)))
+     = { 16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1 };
+  float c[16] __attribute__((aligned(64)))
+     = { 8,8,8,8, 0,0,0,0, 0,0,0,0, 8,8,8,8 };
   __m512 vec_a = _mm512_loadu_ps(a);
   __m512 vec_b = _mm512_loadu_ps(b);
   __m512 vec_c = _mm512_loadu_ps(c);

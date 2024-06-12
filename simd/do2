@@ -29,5 +29,6 @@ gcc -static -o vnni  vnni.o rdtsc.o
 gcc -g -static -o compare compare.c -march=native
 ./compare
 
-
+gcc -g -static -o compare2  compare2.c  -march=native
+./compare2
 

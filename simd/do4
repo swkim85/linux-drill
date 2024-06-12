@@ -1,0 +1,17 @@
+
+gcc -g -static  -mamx-tile  -o amxtile.o -c amxtile.c
+gcc -g -static -o amxtile  amxtile.o  rdtsc.o
+
+./amxtile
+
+
+gcc -g -static -O2 -mamx-tile -fno-strict-aliasing  -o amxtile_O2.o -c amxtile.c
+gcc -g -static -o amxtile_O2  amxtile_O2.o  rdtsc.o
+
+./amxtile_O2
+
+gcc -g -static -O3 -mamx-tile -fno-strict-aliasing  -o amxtile_O3.o -c amxtile.c
+gcc -g -static -o amxtile_O3  amxtile_O3.o  rdtsc.o
+
+./amxtile_O3
+
