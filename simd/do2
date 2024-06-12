@@ -15,9 +15,19 @@ gcc  -static -o bf16ex  bf16ex.o  rdtsc.o  -Wl,-Map=bf16ex.map
 g++ -g -static -o vpmaddwd vpmaddwd.cpp  -march=native
 ./vpmaddwd
 
- g++ -g -static -o vpaddd vpaddd.cpp -march=native
+g++ -g -static -o vpaddd vpaddd.cpp -march=native
 ./vpaddd
 
 g++ -g -static  -o vpdpwssd  vpdpwssd.cpp  -march=native
 ./vpdpwssd
+
+gcc -g -static -o vnni.o  -c vnni.c -march=native -DN=1000000000
+gcc -static -o vnni  vnni.o rdtsc.o
+./vnni
+
+
+gcc -g -static -o compare compare.c -march=native
+./compare
+
+
 
