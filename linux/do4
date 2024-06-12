@@ -7,6 +7,11 @@ ld -m elf_i386  -s tracee_break32.o   -o tracee_break_asm32
 file ./tracee_break_asm32
 ./tracee_break_asm32
 
+gcc -m32 -o tracee_shared  traced_helloworld.c
+
+gcc -m32 -o tracer1.o -c  tracer1.c
+gcc -m32 -o tracer1   tracer1.o
+./tracer1  tracee_shared
 
 gcc -m32 -o tracer3 -DTARGETADDRESS=0x8049016  tracer3.c
 ./tracer3  tracee_break_asm32
