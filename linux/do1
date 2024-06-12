@@ -1,0 +1,5 @@
+gcc -o foo.o -c foo.c
+ar -crs libfoo.a  foo.o
+ar -t libfoo.a
+file libfoo.a 
+
