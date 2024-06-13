@@ -6,6 +6,13 @@
 #include <sys/syscall.h>
 #include <unistd.h>
 #include <stdbool.h>
+
+// signal_handler
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <setjmp.h>
+
 #include "rdtsc.h"
 
 #ifndef MAX_ROWS
@@ -33,21 +40,26 @@ typedef struct __tile_config {
   uint16_t colsb[16]; 
   uint8_t rows[16]; 
 } __tilecfg;
+
 // Initialize tile config 
-static void init_tile_config (__tilecfg *tileinfo) {
+static void init_tile_config (__tilecfg *cfg) {
   int i;
-  tileinfo->palette_id = 1;
-  tileinfo->start_row = 0;
+  cfg->palette_id = 1;
+  cfg->start_row = 0;
+  cfg->reserved_0[0] = 0;
+  cfg->reserved_0[1] = 0;
+  cfg->reserved_0[2] = 0;
+  cfg->reserved_0[3] = 0;
   for (i = 0; i < 1; i++) {
-    tileinfo->colsb[i] = MAX_ROWS;
-    tileinfo->rows[i] =  MAX_ROWS;
+    cfg->colsb[i] = MAX_ROWS;
+    cfg->rows[i] =  MAX_ROWS;
   }
   for (i = 1; i < 4; i++) {
-    tileinfo->colsb[i] = MAX_COLS;
-    tileinfo->rows[i] =  MAX_ROWS;
+    cfg->colsb[i] = MAX_COLS;
+    cfg->rows[i] =  MAX_ROWS;
   }
-  _tile_loadconfig (tileinfo);
 }
+
 // Initialize int8_t buffer 
 static void init_buffer (int8_t *buf, int8_t v1, int8_t v2) {
   int rows, colsb, i, j;
@@ -73,14 +85,11 @@ static void init_buffer32 (int32_t *buf, int32_t value) {
 }
 // Set_tiledata_use() - Invoke syscall to set ARCH_SET_STATE_USE 
 static bool set_tiledata_use() {
-   if (syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_PERM, XFEATURE_XTILEDATA)) {
-      printf("\n Fail to do XFEATURE_XTILEDATA \n\n");
-      return false;
-   } else {
-      printf("\n TILE DATA USE SET - OK \n\n");
-      return true;
-   }
-   return true;
+  if (syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_PERM, XFEATURE_XTILEDATA)) {
+    printf("\n Fail to do XFEATURE_XTILEDATA \n\n");
+    return false;
+  }
+  return true;
 }
 // Print int8_t buffer 
 static void print_buffer(int8_t* buf, int32_t rows, int32_t colsb) {
@@ -105,6 +114,15 @@ static void print_buffer32(int32_t* buf, int32_t rows, int32_t colsb) {
   printf("\n");
 }
 
+
+jmp_buf jump_buffer;
+void signal_handler(int signal) {
+  if (signal == SIGSEGV) {
+    printf("Caught segmentation fault (SIGSEGV)!\n");
+    longjmp(jump_buffer, 1);
+  }
+}
+
 int main() {
   __tilecfg tile_data = {0};
   int8_t src1[MAX];
@@ -115,10 +133,24 @@ int main() {
   uint64_t start, end;
   long long unsigned int elapsed;
 
+  signal(SIGSEGV, signal_handler);  // Register the signal handler
+
   // Request permission to linux kernel to run AMX 
   if (!set_tiledata_use()) exit(-1);
 
   init_tile_config (&tile_data); // Load tile configuration 
+
+  if (setjmp(jump_buffer) == 0) {
+
+    _tile_loadconfig (&tile_data); // initialize AMX tiles
+    printf("This line will not be executed.\n");
+
+  } else {
+    fprintf(stderr, "some configuration error.\n");
+    exit(1);
+  }
+
+  __asm__ __volatile__("nop");
 
   init_buffer (src1, 0, 1); print_buffer(src1, rows, colsb);
   init_buffer (src2, 0, 2); print_buffer(src2, rows, colsb);
