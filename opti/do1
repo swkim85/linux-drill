@@ -1,0 +1,13 @@
+
+gcc -o rdtsc.o  -c rdtsc.c
+gcc -g -static -o vec1.level0  --save-temps  vec1.c  rdtsc.o
+
+gcc  -O1  -fopt-info   -static -o vec1.level1  --save-temps  vec1.c  rdtsc.o
+
+gcc  -O2  -fopt-info   -o vec1.level2  --save-temps  vec1.c  rdtsc.o
+gcc  -O3 --unroll-loops  -fopt-info    -o vec1.level3  --save-temps  vec1.c  rdtsc.o
+
+gcc  -O3 --unroll-loops  -fopt-info -o vec1.level3  --save-temps  vec1.c  rdtsc.o
+gcc  -O3 --unroll-loops  -fopt-info -o vec2.level3  --save-temps  vec2.c  rdtsc.o
+
+

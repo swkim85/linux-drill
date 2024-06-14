@@ -37,7 +37,7 @@ int main() {
   }
   end = rdtsc();
   elapsed = end - start;
-  printf("sleep Elapsed Time (cycles): %llu\n", elapsed);
+  printf("muladd Elapsed Time (cycles): %llu\n", elapsed);
   print_m512i(result);
 
   start = rdtsc();
@@ -46,7 +46,7 @@ int main() {
   }
   end = rdtsc();
   elapsed = end - start;
-  printf("sleep Elapsed Time (cycles): %llu\n", elapsed);
+  printf("dpwssds Elapsed Time (cycles): %llu\n", elapsed);
   print_m512i(result);
 
   return 0;
