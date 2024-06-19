@@ -1,12 +1,13 @@
 
+# git clone git@github.com:swkim85/linux-drill.git
 # sudo apt install net-tools gcc make gdb plocate
-
 
 # apt remove bash-completion
 # sudo vi /etc/bash_completion
 # sudo vi /etc/bash.bashrc
 
-
+#   ln -s ~/linux-drill/bash_aliases ~/.bash_aliases
+#   ln -s ~/linux-drill/vimrc  ~/.vimrc
 alias vienv='vi ~/.bash_aliases ; source ~/.bash_aliases'
 alias ll='ls -la'
 alias lr='ls -ltr'
@@ -26,8 +27,6 @@ alias du1='du -h --max-depth=1'
 alias du2='du -h --max-depth=2'
 
 alias gdb1='gdb -ex "break main" -ex "run" -ex "set pagination off" '
-
-# git clone git@github.com:swkim85/linux-drill.git
 
 alias ga='git add'
 alias gs='git status'
