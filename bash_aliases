@@ -2,12 +2,18 @@
 # git clone git@github.com:swkim85/linux-drill.git
 # sudo apt install net-tools gcc make gdb plocate
 
-# apt remove bash-completion
-# sudo vi /etc/bash_completion
-# sudo vi /etc/bash.bashrc
+
+#   sudo apt install qemu-system-x86
+
+
+#    sudo apt remove bash-completion
+#    sudo vi /etc/bash_completion
+#    sudo vi /etc/bash.bashrc
 
 #   ln -s ~/linux-drill/bash_aliases ~/.bash_aliases
 #   ln -s ~/linux-drill/vimrc  ~/.vimrc
+#   source    ~/.bash_aliases
+#
 alias vienv='vi ~/.bash_aliases ; source ~/.bash_aliases'
 alias ll='ls -la'
 alias lr='ls -ltr'
