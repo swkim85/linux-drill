@@ -18,7 +18,7 @@ alias vienv='vi ~/.bash_aliases ; source ~/.bash_aliases'
 alias ll='ls -la'
 alias lr='ls -ltr'
 
-export PS1='\u@SPR:\w\$ '
+export PS1='\u@ SERVER :\w\$ '
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
