@@ -1,0 +1,86 @@
+
+squid-cache
+http://www.squid-cache.org/
+
+latest versions
+6.10   Jun 2024
+5.9    Apr 2023
+4.16   Oct 2021
+3.5    Jul 2018
+
+wget http://www.squid-cache.org/Versions/v6/squid-6.10.tar.gz
+tar zxvf squid-6.10.tar.gz
+cd squid-6.10/
+
+INSTALL, QUICKSTART
+---------------------
+
+To build and install the Squid Cache, type:
+
+        % ./configure --prefix=/usr/local/squid
+        % make all
+        % make install
+
+To run a Cache, you will need to:
+
+        1. customize the squid.conf configuration file:
+              % vi /usr/local/squid/etc/squid.conf
+
+        2. Initialise the cache:
+              % /usr/local/squid/sbin/squid -z
+
+        3. start the cache:
+              % /usr/local/squid/sbin/squid
+----------------
+
+./configure --prefix=/usr/local/squid
+
+make all
+
+컴파일 시간 많이 걸림
+
+make install
+
+du -h /usr/local/squid/
+...
+110M
+
+vi /usr/local/squid/etc/squid.conf
+...
+# should be allowed
+acl localnet src 150.183.234.0/24
+acl localnet src 150.183.249.0/24
+acl localnet src 150.183.250.0/24
+...
+
+# Squid normally listens to port 3128
+http_port 3128
+...
+# Uncomment and adjust the following to add a disk cache directory.
+cache_dir ufs /usr/local/squid/var/cache/squid 100 16 256
+...
+cache_effective_user   squid
+
+
+
+adduser squid
+
+chown -R squid.squid /usr/local/squid/var
+
+도움말
+/usr/local/squid/sbin/squid  -h
+
+디렉터리 초기화 하기
+/usr/local/squid/sbin/squid -z
+   -z        Create missing swap directories and then exit.
+
+시작하기
+/usr/local/squid/sbin/squid  
+
+ps ax | grep squid
+
+netstat -antp  | grep squid
+
+
+
+
