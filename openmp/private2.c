@@ -5,7 +5,7 @@
 int main() {
   int tid, total_threads;
   int i = 10;
-  #pragma omp parallel private(tid) firstprivate(i)
+  #pragma omp parallel num_threads(2) private(tid) firstprivate(i)
   {
     tid = omp_get_thread_num();
     total_threads = omp_get_num_threads();
