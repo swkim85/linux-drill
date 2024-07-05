@@ -2,6 +2,9 @@ colorscheme ron
 set paste
 set hlsearch
 
+"set relativenumber
+"set nu
+set nonu
 
 " Search for selected text, forwards or backwards.
 vnoremap <silent> * :<C-U>

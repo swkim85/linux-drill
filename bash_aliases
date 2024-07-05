@@ -18,7 +18,7 @@ alias vienv='vi ~/.bash_aliases ; source ~/.bash_aliases'
 alias ll='ls -la'
 alias lr='ls -ltr'
 
-export PS1='\u@ SERVER :\w\$ '
+export PS1='\u@ 8488C  :\w\$ '
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
@@ -27,7 +27,10 @@ alias vimrc='vi ~/.vimrc'
 
 alias vil='vi `ls -tr | tail -n 1`'
 
-alias do='vi do ; cat do'
+alias do1='vi do1 ; cat do1'
+alias do2='vi do2 ; cat do2'
+alias do3='vi do3 ; cat do3'
+alias do4='vi do4 ; cat do4'
 
 alias du1='du -h --max-depth=1'
 alias du2='du -h --max-depth=2'
@@ -39,7 +42,7 @@ alias gs='git status'
 alias gcm='git commit -m "no message"'
 alias gpp='git push'
 
-alias go='cd ~/linux-drill/simd'
+alias go='cd ~/linux-drill/openmp'
 alias go1='cd /usr/lib/gcc/x86_64-linux-gnu/11/include'
 
 
