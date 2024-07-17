@@ -1,0 +1,5 @@
+
+as -g -o maxofsix.o  maxofsix.s
+gcc -g -c callmaxofsix.c  
+gcc  -o maxofsix   callmaxofsix.o  maxofsix.o  
+
