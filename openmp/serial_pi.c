@@ -4,7 +4,7 @@
 #ifndef N
 #define N 100000
 #endif
-static long num_steps = N;
+static unsigned long num_steps = N;
 double step;
 int main() {
   int i;
