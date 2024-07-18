@@ -15,10 +15,11 @@ gcc -g -fopenmp -o hello_omp  hello_omp.c rdtsc.o --save-temps
 OMP_NUM_THREADS=2   ./hello_omp
 OMP_NUM_THREADS=4   ./hello_omp
 
-gcc -g -fopenmp -o private private.c
-gcc -g -fopenmp -o private2 private2.c
-gcc -g -fopenmp -o private3 private3.c
-gcc -g -fopenmp -o private4 private4.c
+gcc -g -fopenmp -o private private.c --save-temps
+gcc -g -fopenmp -o private2 private2.c --save-temps
+gcc -g -fopenmp -o private3 private3.c --save-temps
+gcc -g -fopenmp -o private3b private3b.c --save-temps
+gcc -g -fopenmp -o private4 private4.c --save-temps
 
 gcc -g -fopenmp -o scope scope.c --save-temps
 ./scope

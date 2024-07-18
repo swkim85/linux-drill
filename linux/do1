@@ -1,3 +1,5 @@
+
+# make a static library
 gcc -o foo.o -c foo.c
 ar -crs libfoo.a  foo.o
 ar -t libfoo.a
@@ -10,6 +12,7 @@ gcc -static -o main_static  main.o  -lfoo -L .  -Wl,-Map=main_static.map
 file main_static
 ./main_static
 
+# make a shared library
 gcc -c -Wall -Werror -fpic foo.c
 gcc -shared -o libfoo.so foo.o
 file libfoo.so 

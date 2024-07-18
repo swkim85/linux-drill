@@ -1,4 +1,25 @@
 
+# make a static library
+gcc -o foo.o  -c foo.c
+ar -crs libfoo.a  foo.o
+ar -t libfoo.a
+file libfoo.a
+
+# make an executable
+gcc -g  -o main.o  -c main.c  
+gcc     -o main_nodebug.o  -c main.c
+gcc -static -o main_static  main.o -lfoo -L .  -Wl,-Map=main_static.map 
+
+# make a shared library
+gcc -c -Wall -Werror -fpic  foo.c
+gcc -shared -o libfoo.so  foo.o
+
+# make an executable
+gcc -o main_shared  main.o  -lfoo -L.  -Wl,-Map=main_shared.map 
+
+
+
+
 as -g -o maxofsix.o  maxofsix.s
 gcc -g -c callmaxofsix.c  
 gcc  -o maxofsix   callmaxofsix.o  maxofsix.o  
