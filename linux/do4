@@ -1,30 +1,143 @@
 
-gcc -m32 -g -o breakpoint32  breakpoint.c
-./breakpoint32
+
+
+#===================================================================
+# 32비트
+vi tracee_break32.asm
 
 nasm -f elf  -o tracee_break32.o  tracee_break32.asm
-ld -m elf_i386  -s tracee_break32.o   -o tracee_break_asm32
-file ./tracee_break_asm32
-./tracee_break_asm32
+nm tracee_break32.o  
 
-gcc -m32 -o tracee_shared  traced_helloworld.c
+ld  -m elf_i386   tracee_break32.o   -o tracee_break_asm32
 
-gcc -m32 -o tracer1.o -c  tracer1.c
-gcc -m32 -o tracer1   tracer1.o
-./tracer1  tracee_shared
+nm tracee_break_asm32
 
-gcc -m32 -o tracer3 -DTARGETADDRESS=0x8049016  tracer3.c
+objdump -d tracee_break_asm32
+
+objdump -f  tracee_break_asm32
+
+tracee_break_asm32:     file format elf32-i386
+architecture: i386, flags 0x00000102:
+EXEC_P, D_PAGED
+start address 0x08049000
+
+시작 주소를 확인
+주소는 0x08049000
+
+gdb tracee_break_asm32
+
+(gdb)
+b *0x08049000
+run
+
+(gdb) run
+Starting program: /home/ubuntu/linux-drill/linux/tracee_break_asm32
+
+Breakpoint 1, 0x08049000 in ?? ()
+
+
+(gdb) x/20i $pc
+=> 0x8049000:   mov    $0x804a000,%ecx
+   0x8049005:   mov    $0x7,%edx
+   0x804900a:   mov    $0x1,%ebx
+   0x804900f:   mov    $0x4,%eax
+   0x8049014:   int    $0x80
+   0x8049016:   mov    $0x804a007,%ecx
+   0x804901b:   mov    $0x7,%edx
+   0x8049020:   mov    $0x1,%ebx
+   0x8049025:   mov    $0x4,%eax
+   0x804902a:   int    $0x80
+   0x804902c:   mov    $0x1,%eax
+   0x8049031:   int    $0x80
+
+브레이크 걸 위치를 확인
+
+export ADDRESS=0x8049016
+
+gcc -m32 -o tracer3 -DTARGETADDRESS=$ADDRESS  tracer3.c
 ./tracer3  tracee_break_asm32
 
-gcc -m32 -o tracer4  -DTARGETADDRESS=0x8049016   tracer4.c
+gcc -m32 -o tracer4  -DTARGETADDRESS=$ADDRESS   tracer4.c
 ./tracer4 tracee_break_asm32
 
 
-gcc -m32 -static -O0 -o tracee_break_c32  tracee_break.c
-./tracee_break_c32
+$ ./tracer4 tracee_break_asm32
+[9067] debugger started
+[9068] target started. will run 'tracee_break_asm32'
+[9067] peek : [0x08049016] ==> 0x04a007b9
+[9067] poke : [0x08049016] <== 0x04a007cc
+[9067] peek : [0x08049016] ==> 0x04a007cc
+Hello,
+[9067] Child got a signal: Trace/breakpoint trap
+[9067] Child stopped at eip = 0x08049017
+[9067] poke : [0x08049016] <== 0x04a007b9
+[9067] continue at eip <= 0x08049016
+[9067] parent wait..
+world!
+[9067] parent terminate.
 
 
-gcc -g -m32 -o tracer4 -DTARGETADDRESS=0x8049d1f  tracer4.c
-./tracer4 tracee_break_c32
+
+#===================================================================
+# 64비트
+
+nasm -f elf64 -o tracee_break64.o  tracee_break64.asm
+ld  tracee_break64.o  -o  tracee_break64
+
+objdump -d tracee_break64
+
+objdump -f tracee_break64
+
+tracee_break64:     file format elf64-x86-64
+architecture: i386:x86-64, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0x0000000000401000
+
+
+nm  tracee_break64
+000000000040200e D __bss_start
+000000000040200e D _edata
+0000000000402010 D _end
+0000000000401000 T _start
+0000000000000007 a len1
+0000000000000007 a len2
+0000000000402000 d msg1
+0000000000402007 d msg2
+
+gdb tracee_break64
+
+(gdb) break _start
+Breakpoint 1 at 0x401000
+(gdb) run
+Starting program: /home/ubuntu/linux-drill/linux/tracee_break64
+
+Breakpoint 1, 0x0000000000401000 in _start ()
+
+(gdb) disas _start
+Dump of assembler code for function _start:
+   0x0000000000401000 <+0>:     mov    $0x1,%eax
+   0x0000000000401005 <+5>:     mov    $0x1,%edi
+   0x000000000040100a <+10>:    movabs $0x402000,%rsi
+   0x0000000000401014 <+20>:    mov    $0x7,%edx
+   0x0000000000401019 <+25>:    syscall
+   0x000000000040101b <+27>:    mov    $0x1,%eax
+   0x0000000000401020 <+32>:    mov    $0x1,%edi
+   0x0000000000401025 <+37>:    movabs $0x402007,%rsi
+   0x000000000040102f <+47>:    mov    $0x7,%edx
+   0x0000000000401034 <+52>:    syscall
+   0x0000000000401036 <+54>:    mov    $0x3c,%eax
+   0x000000000040103b <+59>:    mov    $0x0,%edi
+   0x0000000000401040 <+64>:    syscall
+End of assembler dump.
+
+
+브레이크 걸 위치를 확인
+ADDRESS=0x000000000040101b 
+
+gcc -m64 -o tracer3  -DTARGETADDRESS=$ADDRESS   tracer3.c
+./tracer3  tracee_break64
+
+gcc -m64 -o tracer4  -DTARGETADDRESS=$ADDRESS   tracer4.c
+./tracer4  tracee_break64
 
 

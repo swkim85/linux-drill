@@ -39,7 +39,11 @@ void run_debugger(pid_t child_pid) {
   procmsg("peek : [0x%08x] ==> 0x%08x\n", addr,  data);
 
   // 트랩 명령(int 3)을 해당 주소에 쓰기
-  unsigned data_with_trap = (data & 0xffffff00) | 0xcc; // 64비트 에서 long unsigned 임
+#if __x86_64__
+  long unsigned data_with_trap = (data & 0xffffff00) | 0xcc;
+#else
+  unsigned data_with_trap = (data & 0xffffff00) | 0xcc;
+#endif
   procmsg("poke : [0x%08x] <== 0x%08x\n", addr,  data_with_trap);
   ptrace(PTRACE_POKETEXT, child_pid, addr, data_with_trap);
   data_with_trap = ptrace(PTRACE_PEEKTEXT, child_pid, addr, NULL);
@@ -56,8 +60,13 @@ void run_debugger(pid_t child_pid) {
   }
   
   // See where the child is now 
+#if __x86_64__
+  ptrace(PTRACE_GETREGS, child_pid, 0, &regs);
+  procmsg("Child stopped at rip = 0x%08x\n", regs.rip);
+#else
   ptrace(PTRACE_GETREGS, child_pid, 0, &regs);
   procmsg("Child stopped at eip = 0x%08x\n", regs.eip);
+#endif
 }
 
 int main(int argc, char** argv) {

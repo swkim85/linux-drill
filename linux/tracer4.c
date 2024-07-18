@@ -33,17 +33,36 @@ void run_debugger(pid_t child_pid) {
   procmsg("debugger started\n");
   wait(&wait_status);  // child가 첫번째 명령에서 stop될때까지 대기
   
+#if __x86_64__
+
+  // 중단점을 설정할 주소에서 데이터를 읽음
+  long unsigned addr = TARGETADDRESS;  
+  long unsigned data = ptrace(PTRACE_PEEKTEXT, child_pid, addr, NULL);
+  procmsg("peek : [0x%08x] ==> 0x%08x\n", addr,  data);
+
+  // 트랩 명령(int 3)을 해당 주소에 쓰기
+  long unsigned data_with_trap = (data & 0xffffffffffffff00) | 0xcc;
+  procmsg("poke : [0x%08x] <== 0x%08x\n", addr,  data_with_trap);
+  ptrace(PTRACE_POKETEXT, child_pid, addr, data_with_trap);
+  data_with_trap = ptrace(PTRACE_PEEKTEXT, child_pid, addr, NULL);
+  procmsg("peek : [0x%08x] ==> 0x%08x\n", addr,  data_with_trap);
+
+#else
+
   // 중단점을 설정할 주소에서 데이터를 읽음
   unsigned addr = TARGETADDRESS;  
   unsigned data = ptrace(PTRACE_PEEKTEXT, child_pid, addr, NULL);
   procmsg("peek : [0x%08x] ==> 0x%08x\n", addr,  data);
 
   // 트랩 명령(int 3)을 해당 주소에 쓰기
-  unsigned data_with_trap = (data & 0xffffff00) | 0xcc; // 64비트 에서 long unsigned 임
+  unsigned data_with_trap = (data & 0xffffff00) | 0xcc;
   procmsg("poke : [0x%08x] <== 0x%08x\n", addr,  data_with_trap);
   ptrace(PTRACE_POKETEXT, child_pid, addr, data_with_trap);
   data_with_trap = ptrace(PTRACE_PEEKTEXT, child_pid, addr, NULL);
   procmsg("peek : [0x%08x] ==> 0x%08x\n", addr,  data_with_trap);
+
+#endif
+
   // child를 재시작한다. 
   ptrace(PTRACE_CONT, child_pid, 0, 0); // continue
 
@@ -55,16 +74,27 @@ void run_debugger(pid_t child_pid) {
   }
 
   // see where the child is now 
+#if __x86_64__
+  ptrace(PTRACE_GETREGS, child_pid, 0, &regs);
+  procmsg("Child stopped at rip = 0x%08x\n", regs.rip);
+#else
   ptrace(PTRACE_GETREGS, child_pid, 0, &regs);
   procmsg("Child stopped at eip = 0x%08x\n", regs.eip);
+#endif
 
   // remove the breakpoint by restoring the previous data
   procmsg("poke : [0x%08x] <== 0x%08x\n", addr,  data);
   ptrace(PTRACE_POKETEXT, child_pid, addr, data);
 
+#if __x86_64__
+  regs.rip = addr;
+  procmsg("continue at rip <= 0x%08x\n", regs.rip);
+  ptrace(PTRACE_SETREGS, child_pid, 0, &regs);
+#else
   regs.eip = addr;
   procmsg("continue at eip <= 0x%08x\n", regs.eip);
   ptrace(PTRACE_SETREGS, child_pid, 0, &regs);
+#endif
 
   ptrace(PTRACE_CONT, child_pid, 0, 0);
 
