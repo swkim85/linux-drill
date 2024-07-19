@@ -1,4 +1,10 @@
+/*
+gcc -o inline2 inline2.c --save-temps
+./inline2
+objdump -j .text --disassemble=main  inline2
+*/
 #include <stdio.h>
+
 
 int main() {
   int a = 5;

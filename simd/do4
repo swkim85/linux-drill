@@ -1,17 +1,23 @@
 
-gcc -g -static  -mamx-tile  -o amxtile.o -c amxtile.c
-gcc -g -static -o amxtile  amxtile.o  rdtsc.o
-
-./amxtile
+$ gcc -g -static  -mamx-tile -o amx1  amx1.c
+$ ./amx1
 
 
-gcc -g -static -O2 -mamx-tile -fno-strict-aliasing  -o amxtile_O2.o -c amxtile.c
-gcc -g -static -o amxtile_O2  amxtile_O2.o  rdtsc.o
+$ gcc -g -static  -mamx-tile -o amx2  amx2.c
+$ ./amx2
 
-./amxtile_O2
 
-gcc -g -static -O3 -mamx-tile -fno-strict-aliasing  -o amxtile_O3.o -c amxtile.c
-gcc -g -static -o amxtile_O3  amxtile_O3.o  rdtsc.o
+$ gcc -g -static  -mamx-tile -o amx3  amx3.c
+$ ./amx3
 
-./amxtile_O3
+
+$ gcc -g -static  -mamx-tile -o amx4  amx4.c
+$ ./amx4
+
+$ gcc -g -static  -mamx-tile -o amx5  amx5.c  rdtsc.o -DMAX_ROWS=16 -DMAX_COLS=64
+$ ./amx5
+
+
+$ gcc   -g -static  -march=native -o amx6  amx6.c  rdtsc.o -DMAX_ROWS=8 -DMAX_COLS=32
+$ ./amx6
 

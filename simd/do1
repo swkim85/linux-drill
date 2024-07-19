@@ -1,26 +1,80 @@
 
-gcc -g -o cpuid cpuid.c
-./cpuid 
+$ gcc -g -o cpuid cpuid.c
+$ ./cpuid 
+Processor Vendor: GenuineIntel
+Processor Version: 000806f8
+CPUID(EAX=01H):ECX: fffab20b  EDX: 1f8bfbff
+CPUID(EAX=07H):EBX: f1bf07ab
 
-cpuid -l 0
-cpuid -1 -l 7 | grep AMX
+$ sudo apt install cpuid
+$ cpuid
+CPU 0:
+   vendor_id = "GenuineIntel"
+   version information (1/eax):
+      processor type  = primary processor (0)
+      family          = 0x6 (6)
+      model           = 0xf (15)
+      stepping id     = 0x8 (8)
+      extended family = 0x0 (0)
+      extended model  = 0x8 (8)
+      (family synth)  = 0x6 (6)
+      (model synth)   = 0x8f (143)
+      (simple synth)  = Intel Xeon (unknown type) (Sapphire Rapids) [Sapphire Rapids] {Sunny Cove}, 10nm+
+[...]
+$ cpuid -l 0
+CPU 0:
+   vendor_id = "GenuineIntel"
+
+$ cpuid -1 -l 7 | grep AMX
+      AMX-BF16: tile bfloat16 support          = true
+      AMX-TILE: tile architecture support      = true
+      AMX-INT8: tile 8-bit integer support     = true 
 
 
-gcc -o sleeptime  sleeptime.c
+$ gcc -o sleeptime  sleeptime.c
 ./sleeptime 
-grep "cpu MHz" /proc/cpuinfo 
+sleep Elapsed Time (cycles): 2400339036
 
-gcc -o bfloatsum  bfloatsum.c
-./bfloatsum 
-
-gcc -o ops  ops.c
-./ops  1000000000
+$ grep "cpu MHz" /proc/cpuinfo 
+cpu MHz		: 2400.000
+cpu MHz		: 2400.000
 
 
+# 참고 https://github.com/intel/msr-tools.git
+# modprobe  msr
+# lsmod | grep msr
+msr                    12288  0
+$ rdmsr -p 0 0x10
 
-gcc -o rdtsc.o  -c rdtsc.c
-gcc -o opsth.o  -c opsth.c
-gcc -static -o  opsth  rdtsc.o opsth.o
 
-./opsth  100000000  8
+$ gcc -o bfloatsum  bfloatsum.c
+$ ./bfloatsum 
+
+
+$ gcc -o signzero signzero.c
+$ ./signzero 
+
+
+
+$ gcc -o ops  ops.c
+$ ./ops  1000000000
+
+$  (./ops 1; ./ops 2; ./ops 5 ; ./ops 10; ./ops 100; ./ops 1000  ) | grep double | grep mul
+iter=2 double mul+sum Elapsed Time (cycles): 164  ; cpi = 82 
+iter=5 double mul+sum Elapsed Time (cycles): 184  ; cpi = 36.8 
+iter=10 double mul+sum Elapsed Time (cycles): 206  ; cpi = 20.6
+iter=100 double mul+sum Elapsed Time (cycles): 654  ; cpi = 6.54
+iter=1000 double mul+sum Elapsed Time (cycles): 5210  ; cpi = 5.21
+
+$ gcc -o rdtsc.o  -c rdtsc.c
+$ gcc -o opsth.o  -c opsth.c
+$ gcc -static -o  opsth  rdtsc.o opsth.o
+
+$ ./opsth  100000000  8
+thread no=0 iteration=12500000
+thread no=4 iteration=12500000
+[...]
+thread no=5 iteration=12500000
+iteration=100000000 nthreads=8 Elapsed Time (cycles): 66048096
+
 
