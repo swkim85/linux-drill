@@ -1,0 +1,52 @@
+
+$ sudo apt-get install nasm
+
+$ nasm -f elf64   -o hello.o  -l hello.lst  hello.asm 
+$ ld hello.o  -o hello
+$ ./hello 
+Hello, World!
+
+
+$ nasm -f elf  -o hello32.o   hello32.asm
+$ ld -m elf_i386  -s hello32.o  -o hello32
+$ ./hello32
+Hello, World!
+
+
+$ as -o hello_arm.o hello_arm.asm 
+$ ld hello_arm.o -o hello_arm
+$ ./hello_arm 
+hello world
+
+
+$ as -o hello_gnu.o hello_gnu.asm
+$ ld  hello_gnu.o -o hello_gnu
+$ ./hello_gnu 
+Hello, world
+
+
+
+$ as -g -o maxofsix.o  maxofsix.s
+$ gcc -g -c callmaxofsix.c  
+$ gcc  -o maxofsix   callmaxofsix.o  maxofsix.o  
+$ ./maxofsix 
+6
+
+
+$ gcc -g -o fibo.o  -c fibo.c
+$ as  -g -o fibonacci_asm.o fibonacci_asm.s
+$ gcc -o  fibo  fibonacci_asm.o  fibo.o
+$ ./fibo
+f(20) = 6765
+
+
+$ nasm -f elf64   -o hello.o   hello.asm 
+$ hexdump -C hello.o 
+
+$ file hello.o
+$ file hello
+$ readelf -h hello
+
+
+
+
