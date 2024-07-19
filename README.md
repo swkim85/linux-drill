@@ -5,4 +5,5 @@
 - debugging: ptrace and debugging
 - profile : profiling tech.
 - simd : SIMD programming
+- opti : optimization
 - openmp : pthread and openmp
