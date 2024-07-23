@@ -29,7 +29,16 @@ void vector_add1 (float* a, float* b, float* result, int n) {
   for (int i = 0; i < n; i += 4) {
     __m128 va = _mm_loadu_ps(&a[i]);
     __m128 vb = _mm_loadu_ps(&b[i]);
+
+    // Synopsis
+    // __m128 _mm_add_ps (__m128 a, __m128 b)
+    // #include <xmmintrin.h>
+    // Instruction: addps xmm, xmm
+    // CPUID Flags: SSE
+    // Description
+    // Add packed single-precision (32-bit) floating-point elements in a and b, and store the results in dst.
     __m128 vresult = _mm_add_ps(va, vb);
+
     _mm_storeu_ps(&result[i], vresult);
   }
 }
