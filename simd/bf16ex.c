@@ -24,9 +24,9 @@ int main() {
 
   start = rdtsc();
   for (int i = 0; i < 16; i++) {
-    op1_f32[i]  = i+1;
-    op2_f32[i]  = i+32;
-    op3_f32[i]  = 1.0;
+    op1_f32[i]  = i+1; // 0,1,2,3,...,15
+    op2_f32[i]  = i+32; // 32,33,34,...,47
+    op3_f32[i]  = 1.0; // 1,1,1,1,...,1
   }
 
   start = rdtsc();
@@ -40,9 +40,9 @@ int main() {
 
   start = rdtsc();
   // 길이가 16인 2개의 float32 벡터를, 길이가 32인 bf16 백터로 변환
-  v1_f16 = _mm512_cvtne2ps_pbh (v1_f32, v2_f32);
-  v2_f16 = _mm512_cvtne2ps_pbh (v1_f32, v2_f32);
-  v3_f16 = _mm512_cvtne2ps_pbh (v3_f32, v3_f32);
+  v1_f16 = _mm512_cvtne2ps_pbh (v1_f32, v2_f32); // 0,1,...,15,32,33,...,47
+  v2_f16 = _mm512_cvtne2ps_pbh (v1_f32, v2_f32); // 0,1,...,15,32,33,...,47
+  v3_f16 = _mm512_cvtne2ps_pbh (v3_f32, v3_f32); // 1,1,...,1,1,1,...,1
   hexDump("v1_f16 ", &v1_f16, sizeof(v1_f16));
   hexDump("v2_f16 ", &v2_f16, sizeof(v2_f16));
 

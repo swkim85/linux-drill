@@ -11,8 +11,14 @@
 #include <signal.h>
 #include <setjmp.h>
 
+#ifndef MAX_ROWS
 #define MAX_ROWS 4
+#endif
+
+#ifndef MAX_COLS
 #define MAX_COLS 16
+#endif
+
 #define MAX      1024
 #define STRIDE   MAX_COLS
 

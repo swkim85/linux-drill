@@ -11,8 +11,12 @@
 #include <signal.h>
 #include <setjmp.h>
 
+#ifndef MAX_ROWS
 #define MAX_ROWS 4
+#endif
+#ifndef MAX_COLS
 #define MAX_COLS 16
+#endif
 #define MAX      1024
 #define STRIDE   MAX_COLS
 
@@ -142,11 +146,21 @@ int main() {
   _tile_loadd (3, src2, STRIDE);
   _tile_loadd (1, res, STRIDE);
 
-  // Compute dot-product of bytes in tiles
+  // Synopsis
+  // void _tile_dpbssd (constexpr int dst, constexpr int a, constexpr int b)
+  // #include <immintrin.h>
+  // Instruction: tdpbssd tmm, tmm, tmm
+  // CPUID Flags: AMX-INT8
+  // Description
+  // Compute dot-product of bytes in tiles with a source/destination accumulator.
+  // Multiply groups of 4 adjacent pairs of signed 8-bit integers in a with corresponding signed 8-bit integers in b,
+  // producing 4 intermediate 32-bit results.
+  // Sum these 4 results with the corresponding 32-bit integer in dst, and store the 32-bit result back to tile dst.
   _tile_dpbssd (1, 2, 3);
 
   _tile_stored (1, res, STRIDE);
   print_buffer32(res, rows, colsb/4);
-  _tile_release ();
+
+  _tile_release();
 }
 

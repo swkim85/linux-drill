@@ -1,4 +1,7 @@
 
+gcc -g  -march=native -o amxtile amxtile.c rdtsc.o
+./amxtile
+
 $ gcc -g -static  -mamx-tile -o amx1  amx1.c
 $ ./amx1
 
@@ -12,12 +15,19 @@ $ ./amx3
 
 
 $ gcc -g -static  -mamx-tile -o amx4  amx4.c
+$ gcc -g -static  -mamx-tile -o amx4  amx4.c -DMAX_ROWS=2  -DMAX_COLS=8
+$ gcc -g -static  -mamx-tile -o amx4  amx4.c -DMAX_ROWS=4  -DMAX_COLS=16
+$ gcc -g -static  -mamx-tile -o amx4  amx4.c -DMAX_ROWS=8  -DMAX_COLS=32
+$ gcc -g -static  -mamx-tile -o amx4  amx4.c -DMAX_ROWS=16 -DMAX_COLS=64
 $ ./amx4
 
+$ gcc -g -static  -mamx-tile -o amx5  amx5.c  rdtsc.o -DMAX_ROWS=4  -DMAX_COLS=16
 $ gcc -g -static  -mamx-tile -o amx5  amx5.c  rdtsc.o -DMAX_ROWS=16 -DMAX_COLS=64
 $ ./amx5
 
 
 $ gcc   -g -static  -march=native -o amx6  amx6.c  rdtsc.o -DMAX_ROWS=8 -DMAX_COLS=32
 $ ./amx6
+
+
 
