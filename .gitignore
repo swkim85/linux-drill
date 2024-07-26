@@ -1,8 +1,11 @@
 # Prerequisites
 *.d
 
+*.i
+*.s
+
 # Object files
-#*.o
+*.o
 *.ko
 *.obj
 *.elf
@@ -18,7 +21,7 @@
 
 # Libraries
 *.lib
-#*.a
+*.a
 *.la
 *.lo
 

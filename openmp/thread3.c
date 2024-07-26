@@ -4,27 +4,23 @@
 #include <unistd.h>
 #include <pthread.h>
 
+#define SIZE 500*1024*1024  // 500MB
+long unsigned totalalloc = 0;
+
 void *MyThreadFunc(void* arg){
-
-  printf("child thread start. \n");
-  sleep( 10 );
-
-  printf("pthread_detach. \n");
-  pthread_detach (pthread_self ());
-
-  sleep( 10 );
-
-  printf("child thread exit.\n");
+  void *ptr = malloc(SIZE);
+  totalalloc += SIZE;
+  printf("malloc size = %d, ptr=%p \n", SIZE, ptr);
   return NULL;
 } 
 
 int main() {
   pthread_t aThread;
-  pthread_create(&aThread, NULL, MyThreadFunc, NULL); 
-
-  sleep( 30 );
-  pthread_join(aThread, NULL); 
-
+  for (int i = 0; ; i++) { 
+    printf("iter = %d, totalalloc %ld MB \n", i, totalalloc/1024/1024);
+    pthread_create(&aThread, NULL, MyThreadFunc, NULL); 
+    pthread_join(aThread, NULL); 
+  }
   printf("main program exit.\n");
   return 0;
 }

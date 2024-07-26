@@ -1,4 +1,25 @@
 
+$ gcc -g  -o thread1  thread1.c   -pthread
+$ ./thread1
+Hello message from a thread
+main program exit.
+
+
+$ gcc -g  -o  thread2  thread2.c  -pthread
+$ ./thread2
+main program exit.
+Hello message from a thread  <-- main thread 가 종료된 이후에는 출력되지 않음
+
+
+
+$ gcc -g  -o  thread3  thread3.c  -pthread
+$ ./thread3
+child thread start.
+pthread_detach.
+child thread exit.
+main program exit.
+
+
 
 gcc -o rdtsc.o  -c rdtsc.c
 
