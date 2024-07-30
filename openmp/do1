@@ -1,5 +1,6 @@
 
 $ gcc -g  -o thread1  thread1.c   -pthread
+$ clang -g  -o thread1  thread1.c   -pthread
 $ ./thread1
 Hello message from a thread
 main program exit.
@@ -11,20 +12,28 @@ main program exit.
 Hello message from a thread  <-- main thread 가 종료된 이후에는 출력되지 않음
 
 
-
-$ gcc -g  -o  thread3  thread3.c  -pthread
+$ gcc -g  -o  thread3  thread3.c  -pthread 
+$ gcc -g  -o  thread3  thread3.c  -pthread -DDETACH
+$ gcc -g  -o  thread3  thread3.c  -pthread -DJOIN
 $ ./thread3
-child thread start.
-pthread_detach.
-child thread exit.
-main program exit.
 
 
+$ gcc -g  -o  thread4  thread4.c  -pthread
+$ ./thread4
 
 gcc -o rdtsc.o  -c rdtsc.c
 
 
-gcc -g  -o thread_example  thread_example.c  -pthread
+
+gcc -g  -o  procon  procon.c  -pthread
+
+
+
+
+
+
+
+
 gcc -g  -o thread_example2  thread_example2.c  -pthread
 
 export OMP_NUM_THREADS=2

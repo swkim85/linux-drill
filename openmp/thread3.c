@@ -3,25 +3,30 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
-
-#define SIZE 500*1024*1024  // 500MB
-long unsigned totalalloc = 0;
-
+#define SLEEP 100000
 void *MyThreadFunc(void* arg){
-  void *ptr = malloc(SIZE);
-  totalalloc += SIZE;
-  printf("malloc size = %d, ptr=%p \n", SIZE, ptr);
+  usleep(SLEEP);
+  printf("thread exit.\n");
   return NULL;
 } 
 
 int main() {
   pthread_t aThread;
+  int ret;
   for (int i = 0; ; i++) { 
-    printf("iter = %d, totalalloc %ld MB \n", i, totalalloc/1024/1024);
-    pthread_create(&aThread, NULL, MyThreadFunc, NULL); 
-    pthread_join(aThread, NULL); 
+    ret = pthread_create(&aThread, NULL, MyThreadFunc, NULL); 
+    if (ret) { printf(" pthread_create failed \n"); break; }
+#ifdef DETACH
+    printf("detach thread.\n");
+    pthread_detach (aThread);
+#endif
+#ifdef JOIN
+    ret = pthread_join(aThread, NULL); 
+    if (ret) { printf(" pthread_join failed \n"); }
+#endif
+    printf("iter = %d \n", i);
+    usleep(SLEEP);
   }
   printf("main program exit.\n");
   return 0;
 }
-

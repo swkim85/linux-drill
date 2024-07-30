@@ -1,0 +1,22 @@
+
+gcc -g  -o  mutex1  mutex1.c -pthread
+./mutex1
+
+
+gcc -g  -o  mutex2  mutex2.c -pthread
+./mutex2
+
+gcc -g  -o  deadlock  deadlock.c -pthread
+./deadlock
+
+gcc -g  -o  mutex3  mutex3.c -pthread
+
+gcc -g -o procon    procon.c -pthread
+
+gcc -g -o types types.c -pthread
+
+gcc -g -o signalwait  signalwait.c -pthread
+
+gcc -g -o rwlock      rwlock.c -pthread
+
+
