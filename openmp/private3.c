@@ -13,9 +13,9 @@ int main() {
     tid = omp_get_thread_num();
     total_threads = omp_get_num_threads();
     for (; total > 0; total--) {
-      printf("Hello from thread %d of %d. total=%d\n", tid, total_threads, total);
+      printf("Hello from thread %d of %d. total=%d(%p)\n", tid, total_threads, total, &total);
     }
   }
-  printf("program terminated. tid=%d total=%d\n", tid, total);
+  printf("program terminated. tid=%d total=%d(%p)\n", tid, total, &total);
   return 0;
 }

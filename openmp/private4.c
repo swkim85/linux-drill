@@ -12,14 +12,10 @@ int main() {
     total_threads = omp_get_num_threads();
     #pragma omp lastprivate(last_value)
     for (i = 0; i < 10; i++) {
-      printf("Hello from thread %d of %d. i=%d\n", tid, total_threads, i);
       last_value = tid * 100 + i;
+      printf("Hello from thread %d of %d. i=%d last_value=%3d(%p)\n", tid, total_threads, i, last_value, &last_value);
     }
   }
-  printf("program terminated. tid=%d last_value=%d\n", tid, last_value);
+  printf("program terminated. tid=%d last_value=%3d(%p)\n", tid, last_value, &last_value);
   return 0;
 }
-
-
-
-
