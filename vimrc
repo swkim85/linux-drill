@@ -1,4 +1,30 @@
-colorscheme ron
+
+"colorscheme blue
+"colorscheme darkblue
+"colorscheme default
+"colorscheme delek
+"colorscheme desert
+"colorscheme elflord
+"colorscheme evening
+"colorscheme habamax
+"colorscheme industry
+"colorscheme koehler
+"colorscheme lunaperche
+"colorscheme morning
+"colorscheme murphy
+colorscheme pablo
+"colorscheme peachpuff
+"colorscheme quiet
+"colorscheme retrobox
+"colorscheme ron
+"colorscheme shine
+"colorscheme slate
+"colorscheme sorbet
+"colorscheme torte
+"colorscheme wildcharm
+"colorscheme zaibatsu
+"colorscheme zellner
+
 set paste
 set hlsearch
 

@@ -1,0 +1,28 @@
+
+gcc -c fftw_example.c -I/usr/local/fftw/include
+gcc -o fftw_example  fftw_example.o -lfftw3 -lm -L/usr/local/fftw/lib
+
+gcc -c fft1.c -I/usr/local/fftw/include
+gcc -o fft1 fft1.o -lfftw3 -lm -L/usr/local/fftw/lib
+
+gcc -g -o complex_addition complex_addition.c -lm --save-temps
+
+gcc -c inverse_fft.c -I/usr/local/fftw/include
+gcc -o inverse_fft  inverse_fft.o -lfftw3 -lm -L/usr/local/fftw/lib
+
+gcc          -o fft2  fft2.c -lm
+gcc -fopenmp -o fft2  fft2.c -lm
+./fft2 > fft2.txt
+gnuplot fft2.plot
+
+gcc -fopenmp -o fft3  fft3.c -lm
+./fft3 > fft3.txt
+gnuplot fft3.plot
+sz fft3a.png fft3b.png fft3c.png
+
+
+OMP_NUM_THREADS=1  ./fft2 > out1
+OMP_NUM_THREADS=2  ./fft2 > out2
+OMP_NUM_THREADS=4  ./fft2 > out4
+OMP_NUM_THREADS=8  ./fft2 > out8
+

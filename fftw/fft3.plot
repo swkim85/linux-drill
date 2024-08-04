@@ -1,0 +1,11 @@
+# gnuplot plot_commands.gnu
+set terminal pngcairo enhanced color font 'Arial,10'
+set title 'fft3 plot'
+set xlabel 'X-axis'
+set ylabel 'Y-axis'
+set output 'fft3a.png'
+plot 'fft3.txt' using 1:2 with linespoints title 'input(real)'
+set output 'fft3b.png'
+plot 'fft3.txt' using 1:4 with linespoints title 'output(real)'
+set output 'fft3c.png'
+plot 'fft3.txt' using 1:5 with linespoints title 'output(imag)'

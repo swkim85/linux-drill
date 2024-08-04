@@ -1,5 +1,7 @@
 
 
+gcc -g -fopenmp -o test1 test1.c 
+
 gcc -o rdtsc.o  -c rdtsc.c
 
 export OMP_NUM_THREADS=2
@@ -26,4 +28,13 @@ gcc -g -fopenmp -o loop  loop.c --save-temps
 
 gcc -g -o futex_wake futex_wake.c --save-temps
 
+
+
+gcc -g -fopenmp -o par1 par1.c
+gcc -g -fopenmp -o par1_nested par1.c -DNESTED
+
+
+gcc -g -fopenmp -o par2 par2.c
+
+gcc -g -fopenmp -o reduction reduction.c
 
