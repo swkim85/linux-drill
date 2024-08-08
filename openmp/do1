@@ -61,7 +61,6 @@ gcc -g -fopenmp -o par2a par2a.c
 
 gcc -g -fopenmp -o par3 par3.c
 
-
 gcc -g -fopenmp -o reduction reduction.c
 
 gcc -g -fopenmp -o dynamic dynamic.c
@@ -81,7 +80,16 @@ OMP_SCHEDULE="nonmonotonic:dynamic,2" ./sched2
 gcc -g -fopenmp -o loop  loop.c
 ./loop
 
+##################################
+# etc
+##################################
 
-
-
+gcc -g -fopenmp -o matmul  matmul.c -DN=100
+gcc -g -fopenmp -o matmul  matmul.c -DN=1000
+gcc -g -fopenmp -o matmul  matmul.c -DN=2000
+gcc -g -fopenmp -o matmul  matmul.c -DN=3000
+OMP_NUM_THREADS=1   ./matmul > out
+OMP_NUM_THREADS=2   ./matmul > out
+OMP_NUM_THREADS=4   ./matmul > out
+OMP_NUM_THREADS=8   ./matmul > out
 
