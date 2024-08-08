@@ -4,8 +4,8 @@
 
 int main() {
   int tid, total_threads;
-  #pragma omp parallel
-  //_Pragma("omp parallel")
+  #pragma omp parallel  // preprocessor directive
+  _Pragma("omp parallel")  // preprocessor operator
   {
     tid = omp_get_thread_num();
     total_threads = omp_get_num_threads();

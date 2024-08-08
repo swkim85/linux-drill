@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <omp.h>
 #include <limits.h>
-#include <time.h>
-
 int main() {
   const int size = 1000;
   int *arr = (int *)malloc(size * sizeof(int));
@@ -12,9 +10,8 @@ int main() {
   int min_value = INT_MAX;
   int max_value = INT_MIN;
 
-  srand((unsigned int)time(NULL));
   for (int i = 0; i < size; i++) {
-    arr[i] = rand() % 100000; 
+    arr[i] = i % 99; 
   }
 
   #pragma omp parallel for reduction(+:sum) reduction(min:min_value) reduction(max:max_value)

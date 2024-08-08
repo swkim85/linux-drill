@@ -54,30 +54,34 @@ OMP_NUM_THREADS=2  ./par1
 OMP_NESTED=true OMP_NUM_THREADS=2  ./par1
 OMP_NUM_THREADS=2  ./par1_nested
 
+gcc -g -fopenmp -o par1b par1b.c
+
 gcc -g -fopenmp -o par2 par2.c
 gcc -g -fopenmp -o par2a par2a.c
 
 gcc -g -fopenmp -o par3 par3.c
 
 
+gcc -g -fopenmp -o reduction reduction.c
 
+gcc -g -fopenmp -o dynamic dynamic.c
+OMP_NUM_THREADS=2 ./dynamic
+OMP_NUM_THREADS=3 ./dynamic
+OMP_NUM_THREADS=4 ./dynamic
 
+gcc -g -fopenmp -o sched1 sched1.c
+./sched1
 
-gcc -g -fopenmp -o scope scope.c
-./scope
+gcc -g -fopenmp -o sched2 sched2.c
+OMP_SCHEDULE="static" ./sched2
+OMP_SCHEDULE="dynamic,1" ./sched2
+OMP_SCHEDULE="dynamic,2" ./sched2
+OMP_SCHEDULE="nonmonotonic:dynamic,2" ./sched2
 
 gcc -g -fopenmp -o loop  loop.c
 ./loop
 
-gcc -g -o futex_wake futex_wake.c 
 
 
 
-gcc -g -fopenmp -o par1 par1.c
-gcc -g -fopenmp -o par1_nested par1.c -DNESTED
-
-
-gcc -g -fopenmp -o par2 par2.c
-
-gcc -g -fopenmp -o reduction reduction.c
 
