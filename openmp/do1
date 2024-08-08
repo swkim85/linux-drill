@@ -1,29 +1,72 @@
 
 
+##################################
+# intro
+##################################
 gcc -o rdtsc.o  -c rdtsc.c
 
 export OMP_NUM_THREADS=2
-gcc -g -fopenmp -o hello_omp  hello_omp.c rdtsc.o --save-temps
+gcc -g -fopenmp -o hello_omp  hello_omp.c 
+gcc -g -fopenmp -o hello_omp  hello_omp.c --save-temps
 
-#  gdb ./hello_omp
+gdb ./hello_omp
 
+gcc -g -fopenmp -o  gomp_version  gomp_version.c
 
 OMP_NUM_THREADS=2   ./hello_omp
 OMP_NUM_THREADS=4   ./hello_omp
 
-gcc -g -fopenmp -o private private.c --save-temps
 
-gcc -g -fopenmp -o private2 private2.c --save-temps
-gcc -g -fopenmp -o private3 private3.c --save-temps
-gcc -g -fopenmp -o private3b private3b.c --save-temps
-gcc -g -fopenmp -o private4 private4.c --save-temps
+##################################
+# private clauses
+##################################
 
-gcc -g -fopenmp -o scope scope.c --save-temps
+export OMP_NUM_THREADS=2
+gcc -g -fopenmp -o private private.c 
+gcc -g -fopenmp -o a a.c  rdtsc.o --save-temps
+
+gcc -g -fopenmp -o private2 private2.c 
+gcc -g -fopenmp -o private3 private3.c 
+
+gcc -g -fopenmp -o private3b private3b.c 
+gcc -g -fopenmp -o private3b private3b.c  -DTEST
+
+gcc -g -fopenmp -o private4 private4.c
+
+
+##################################
+# workshare directive
+##################################
+export OMP_NUM_THREADS=2
+gcc -g -fopenmp -o share1 share1.c
+gcc -g -fopenmp -o share2 share2.c
+gcc -g -fopenmp -o share3 share3.c
+gfortran -g -fopenmp -o share3f  share3.f90
+
+##################################
+# parallel execution control
+##################################
+gcc -g -fopenmp -o par1 par1.c
+gcc -g -fopenmp -o par1_nested par1.c -DNESTED
+OMP_NUM_THREADS=2  ./par1
+OMP_NESTED=true OMP_NUM_THREADS=2  ./par1
+OMP_NUM_THREADS=2  ./par1_nested
+
+gcc -g -fopenmp -o par2 par2.c
+gcc -g -fopenmp -o par2a par2a.c
+
+gcc -g -fopenmp -o par3 par3.c
+
+
+
+
+
+gcc -g -fopenmp -o scope scope.c
 ./scope
 
-gcc -g -fopenmp -o loop  loop.c --save-temps
+gcc -g -fopenmp -o loop  loop.c
 ./loop
 
-gcc -g -o futex_wake futex_wake.c --save-temps
+gcc -g -o futex_wake futex_wake.c 
 
 
