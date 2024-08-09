@@ -1,0 +1,7 @@
+
+gcc -fopenacc -o acc1  acc1.c
+ldd acc1
+./acc1
+
+gcc -fopenacc -o get_device_type  get_device_type.c
+
