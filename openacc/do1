@@ -5,3 +5,5 @@ ldd acc1
 
 gcc -fopenacc -o get_device_type  get_device_type.c
 
+gcc -fopenacc -foffload=nvptx-none -o gv1  gv1.c
+
