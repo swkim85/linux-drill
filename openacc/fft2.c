@@ -1,4 +1,4 @@
-// dft.c
+// fft2.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

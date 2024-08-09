@@ -12,11 +12,11 @@
 "colorscheme lunaperche
 "colorscheme morning
 "colorscheme murphy
-colorscheme pablo
+"colorscheme pablo
 "colorscheme peachpuff
 "colorscheme quiet
 "colorscheme retrobox
-"colorscheme ron
+colorscheme ron
 "colorscheme shine
 "colorscheme slate
 "colorscheme sorbet

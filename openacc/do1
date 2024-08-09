@@ -6,4 +6,45 @@ ldd acc1
 gcc -fopenacc -o get_device_type  get_device_type.c
 
 gcc -fopenacc -foffload=nvptx-none -o gv1  gv1.c
+gcc -fopenacc -foffload=nvptx-none -fcf-protection=none -o gv1  gv1.c
+export ACC_DEVICE_TYPE=nvidia
+export ACC_DEVICE_NUM=0
+export GOMP_DEBUG=1
+./gv1
+export ACC_DEVICE_TYPE=host
+./gv1
+
+
+
+export NVARCH=`uname -s`_`uname -m`
+export NVCOMPILERS=/opt/nvidia/hpc_sdk
+export MANPATH=$MANPATH:$NVCOMPILERS/$NVARCH/24.7/compilers/man
+export PATH=$NVCOMPILERS/$NVARCH/24.7/compilers/bin:$PATH
+
+
+nvc -acc -gpu=cc70 testnvc.c  -o testnvc
+
+nvc -acc vecadd.c -o vecadd
+nvc -acc -fast -Minfo  vecadd.c -o vecadd   
+./vecadd 
+NVCOMPILER_ACC_NOTIFY=1 ./vecadd
+NVCOMPILER_ACC_NOTIFY=3 ./vecadd
+export LD_LIBRARY_PATH=$NVCOMPILERS/Linux_x86_64/24.7/cuda/12.5/extras/CUPTI/lib64
+NVCOMPILER_ACC_TIME=1  ./vecadd 
+
+nvc -acc -fast -Minfo  vecadd2.c -o vecadd2
+NVCOMPILER_ACC_TIME=1  ./vecadd2
+
+
+#####################################
+# fft2
+#####################################
+gcc -g -fopenmp -o fft2  fft2.c -lm -DSIZE=10000
+OMP_NUM_THREADS=1  ./fft2 > out1
+OMP_NUM_THREADS=2  ./fft2 > out2
+OMP_NUM_THREADS=4  ./fft2 > out4
+OMP_NUM_THREADS=8  ./fft2 > out8
+
+
+
 
