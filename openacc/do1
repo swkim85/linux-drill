@@ -37,14 +37,41 @@ NVCOMPILER_ACC_TIME=1  ./vecadd2
 
 
 #####################################
-# fft2
+# fft2mp
 #####################################
-gcc -g -fopenmp -o fft2  fft2.c -lm -DSIZE=10000
-OMP_NUM_THREADS=1  ./fft2 > out1
-OMP_NUM_THREADS=2  ./fft2 > out2
-OMP_NUM_THREADS=4  ./fft2 > out4
-OMP_NUM_THREADS=8  ./fft2 > out8
+gcc -g -fopenmp -o fft2mp  fft2mp.c -lm -DSIZE=10000
+OMP_NUM_THREADS=1  ./fft2mp > out1
+OMP_NUM_THREADS=2  ./fft2mp > out2
+OMP_NUM_THREADS=4  ./fft2mp > out4
+OMP_NUM_THREADS=8  ./fft2mp > out8
 
 
+#####################################
+# fft2acc
+#####################################
+export CFLAGS="-fcf-protection=none"
+gcc -g -fopenacc -foffload=nvptx-none  -o fft2acc  fft2acc.c -lm -DSIZE=10000
+
+nvc -acc -fast -Minfo   fft2acc.c  -o fft2acc   -DSIZE=10000
+NVCOMPILER_ACC_TIME=1  ./fft2acc
+
+
+gcc -g -fopenmp -o matmul  matmul.c -DN=1000
+OMP_NUM_THREADS=1   ./matmul > out
+OMP_NUM_THREADS=2   ./matmul > out
+OMP_NUM_THREADS=4   ./matmul > out
+OMP_NUM_THREADS=8   ./matmul > out
+
+export CFLAGS="-fcf-protection=none"
+gcc -g -fopenacc -foffload=nvptx-none  -o matmulacc  matmulacc.c -DN=1000
+export ACC_DEVICE_TYPE=nvidia
+export ACC_DEVICE_NUM=0
+export GOMP_DEBUG=1
+./matmulacc > out
+export ACC_DEVICE_TYPE=host
+./matmulacc > out
+
+nvc -acc -fast -Minfo  -o matmulacc  matmulacc.c -DN=1000
+NVCOMPILER_ACC_TIME=1  ./matmulacc
 
 

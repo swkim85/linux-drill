@@ -1,4 +1,4 @@
-// fft2.c
+// fft2acc.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -10,9 +10,7 @@
 #endif
 
 void DFT(double *in_real, double *in_imag, double *out_real, double *out_imag, int N) {
-  #pragma omp parallel
-  {
-    #pragma omp for
+    #pragma acc parallel loop
     for (int k = 0; k < N; k++) {
       out_real[k] = 0;
       out_imag[k] = 0;
@@ -22,7 +20,6 @@ void DFT(double *in_real, double *in_imag, double *out_real, double *out_imag, i
         out_imag[k] += -in_real[n] * sin(angle) + in_imag[n] * cos(angle);
       }
     }
-  }
 }
 
 void initialize(double *real, double *imag, int n) {
