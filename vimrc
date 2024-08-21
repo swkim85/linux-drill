@@ -1,4 +1,6 @@
 
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
 "colorscheme blue
 "colorscheme darkblue
 "colorscheme default
@@ -16,7 +18,7 @@
 "colorscheme peachpuff
 "colorscheme quiet
 "colorscheme retrobox
-colorscheme ron
+"colorscheme ron
 "colorscheme shine
 "colorscheme slate
 "colorscheme sorbet

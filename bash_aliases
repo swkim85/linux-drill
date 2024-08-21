@@ -47,4 +47,6 @@ alias go='cd ~/linux-drill/openmp'
 alias go1='cd /usr/lib/gcc/x86_64-linux-gnu/11/include'
 
 
+export ROCM_PATH=/opt/rocm-6.2.0
+export PATH=$PATH:$ROCM_PATH/bin:$ROCM_PATH/llvm/bin
 
