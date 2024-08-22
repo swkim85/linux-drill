@@ -1,0 +1,5 @@
+
+g++  -o vector  vector.cpp --save-temps
+
+
+g++  -o vecimpl  vecimpl.cpp --save-temps

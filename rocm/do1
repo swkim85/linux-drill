@@ -5,7 +5,7 @@ hipcc vector_add.cpp -o vector_add --save-temps
 hipcc matrix_mul.cpp -o matrix_mul
 ./matrix_mul
 
-hipcc   hip_device_attributes.cpp  -o hip_device_attributes
+hipcc -w  hip_device_attributes.cpp  -o hip_device_attributes
 ./hip_device_attributes
 
 hipcc  hello.cpp -o hello --save-temps
