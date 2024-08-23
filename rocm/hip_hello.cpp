@@ -8,7 +8,7 @@ __global__ void gpuHello() {
 }
 
 int main() {
-  gpuHello<<<dim3(1),dim3(1), 0, 0>>>();
+  gpuHello<<<1, 1>>>();
   //hipLaunchKernelGGL(gpuHello, dim3(2), dim3(4), 0, 0);
   hipDeviceSynchronize();
   return 0;
