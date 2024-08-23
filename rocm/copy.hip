@@ -1,49 +1,51 @@
+// copy.hip
 #include <hip/hip_runtime.h>
 #include <iostream>
 #include <cstring>
+#include <random>
 
-#define HIP_CHECK(status) \
-  if (status != hipSuccess) { \
-    std::cerr << "HIP error: " << hipGetErrorString(status) << std::endl; \
-    exit(1); \
-  }
+#define SIZE  1048576   // 1024*1024
 
-#define SIZE 20
-
-void print_data(int *data) {
-  for (int i = 0; i < SIZE; ++i) {
-    std::cout << data[i] << " ";
-  }
+void print_data(int *data, int n) {
+  for (int i = 0; i < 10; ++i) std::cout << data[i] << " "; // first 10 items
+  std::cout << " ... ";
+  for (int i = n-10; i < n; ++i) std::cout << data[i] << " "; // last 10 items
   std::cout << std::endl;
 }
 
+void initialize(int *data, int n) {
+  std::mt19937 gen(std::time(0));
+  std::uniform_int_distribution<> dis(1, 10000);
+  for (int i = 0; i < n; ++i) {
+    data[i] = dis(gen); // random distribution
+  }
+}
+
+int  hostData[SIZE];
+int  hostDataCopy[SIZE];
+
 int main() {
-    int  hostData[SIZE];
-    for (int i = 0; i < SIZE; ++i) {
-        hostData[i] = static_cast<int>(i);  // 0부터 99까지의 값으로 초기화
-    }
-    print_data(hostData);
 
-    int  hostDataCopy[SIZE];
-    int *deviceData;
-    int buffer_size = SIZE * sizeof(int);
+  int *deviceData;
+  int buffer_size = SIZE * sizeof(int);
 
-    hipMalloc((void**)&deviceData, buffer_size); // alloc device memory 
+  initialize(hostData, SIZE); // hostData 를 초기화
+  print_data(hostData, SIZE);
 
-    hipMemcpy(deviceData, hostData, buffer_size, hipMemcpyHostToDevice); // host -> device
-    HIP_CHECK(hipDeviceSynchronize());
+  hipMalloc((void**)&deviceData, buffer_size); // 디바이스 메모리 할당
 
-    hipMemcpy(hostDataCopy, deviceData, buffer_size, hipMemcpyDeviceToHost); // device -> host
-    print_data(hostDataCopy);
+  hipMemcpy(deviceData, hostData, buffer_size, hipMemcpyHostToDevice); // host -> device
 
-    bool isIdentical = (std::memcmp(hostData, hostDataCopy, buffer_size) == 0);
-    if (isIdentical) {
-        std::cout << "Data matches!" << std::endl;
-    } else {
-        std::cout << "Data does not match!" << std::endl;
-    }
+  hipMemcpy(hostDataCopy, deviceData, buffer_size, hipMemcpyDeviceToHost); // device -> host
+  print_data(hostDataCopy, SIZE);
 
-    hipFree(deviceData);
+  bool isIdentical = (std::memcmp(hostData, hostDataCopy, buffer_size) == 0);
+  if (isIdentical) {
+    std::cout << "Data matches!" << std::endl;
+  } else {
+    std::cout << "Data does not match!" << std::endl;
+  }
 
-    return 0;
+  hipFree(deviceData);
+  return 0;
 }
