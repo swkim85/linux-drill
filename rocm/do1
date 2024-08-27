@@ -11,3 +11,28 @@ hipcc -w  hip_device_attributes.cpp  -o hip_device_attributes
 hipcc  hello.cpp -o hello --save-temps
 ./hello
 
+
+hipcc -w saxpy.hip  -o saxpy
+hipcc -w saxpy2.hip  -o saxpy2
+
+hipcc -w matvec.hip  -o matvec -DROWS=16 -DCOLS=16
+hipcc -w matvec.hip  -o matvec -DROWS=1024 -DCOLS=1024
+hipcc -w matvec.hip  -o matvec -DROWS=32768 -DCOLS=32768
+
+hipcc -w matvec.hip  -o matvec -DROWS=32768 -DCOLS=32768 -DBLOCKSIZE=16
+hipcc -w matvec.hip  -o matvec -DROWS=32768 -DCOLS=32768 -DBLOCKSIZE=32
+hipcc -w matvec.hip  -o matvec -DROWS=32768 -DCOLS=32768 -DBLOCKSIZE=64
+hipcc -w matvec.hip  -o matvec -DROWS=32768 -DCOLS=32768 -DBLOCKSIZE=1024
+hipcc -w matvec.hip  -o matvec -DROWS=32768 -DCOLS=32768 -DBLOCKSIZE=2048  # error
+
+
+hipcc -w shared.hip  -o shared   -DROWS=1024 -DCOLS=1024 -DBLOCKSIZE=256
+hipcc -w shared.hip  -o shared   -DROWS=1024 -DCOLS=1024 -DBLOCKSIZE=512
+hipcc -w shared.hip  -o shared   -DROWS=1024 -DCOLS=1024 -DBLOCKSIZE=1024
+
+hipcc -w sgemv.hip  -o sgemv  -DROWS=1024 -DCOLS=1024 -DBLOCKSIZE=1024
+
+hipcc -w event.hip  -o event  
+
+
+

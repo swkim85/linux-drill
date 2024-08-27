@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 value = 4
 while value <= 1024*1024*1024:
