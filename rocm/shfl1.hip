@@ -1,0 +1,51 @@
+// shfl1.hip
+#include <hip/hip_runtime.h>
+#include <iostream>
+
+//#define N 1024
+
+__global__ void shflKernel(float* in, float* out, int mod) {
+  int idx = threadIdx.x + blockIdx.x * blockDim.x;
+  if (idx < N) {
+    float val = in[idx];
+    val = __shfl(val, idx % mod);
+    out[idx] = val;
+  }
+}
+
+void print_vec(std::string title, float *data, int n) {
+  if (title.length()) std::cout << title ;
+  std::cout << " [ ";
+  for (int i = 0; i < n; ++i) std::cout << data[i] << " ";
+  std::cout << " ]" << std::endl;
+}
+
+void initialize_vector(float *vec, int n, float value) {
+  for (int i = 0; i < n; i++) {
+    vec[i] = i * value;
+  }
+}
+
+__managed__ float a[N], b[N];
+int main() {
+
+  initialize_vector(a, N, 1);
+  print_vec("a", a, N);
+
+  int blockSize = 256;
+  int numBlocks = (N + blockSize - 1) / blockSize;
+
+  int mod = 2;
+  shflKernel <<<dim3(numBlocks), dim3(blockSize), 0, 0>>>(a, b, mod);
+  hipDeviceSynchronize();
+  std::cout << " mod=" << mod << std::endl;
+  print_vec("b", b, N);
+
+  mod = 6;
+  shflKernel <<<dim3(numBlocks), dim3(blockSize), 0, 0>>>(a, b, mod);
+  hipDeviceSynchronize();
+  std::cout << " mod=" << mod << std::endl;
+  print_vec("b", b, N);
+
+  return 0;
+}

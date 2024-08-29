@@ -1,4 +1,13 @@
 
+
+hipcc   -o bandwidth  bandwidth.hip  -DDSIZE=1048576   # 1MB
+hipcc   -o bandwidth  bandwidth.hip  -DDSIZE=1073741824  # 1GB
+hipcc   -o bandwidth  bandwidth.hip  -DDSIZE=2147483648  # 2GB
+hipcc   -o bandwidth  bandwidth.hip  -DDSIZE=4294967296  # 4GB
+hipcc   -o bandwidth  bandwidth.hip  -DDSIZE=7516192768  # 7GB
+hipcc   -o bandwidth  bandwidth.hip  -DDSIZE=8053063680  # 7.5GB
+
+
 hipcc vector_add.cpp -o vector_add --save-temps
 ./vector_add
 
@@ -12,7 +21,7 @@ hipcc  hello.cpp -o hello --save-temps
 ./hello
 
 
-hipcc -w saxpy.hip  -o saxpy
+hipcc -w saxpy.hip  -o saxpy --save-temps
 hipcc -w saxpy2.hip  -o saxpy2
 
 hipcc -w matvec.hip  -o matvec -DROWS=16 -DCOLS=16
@@ -33,6 +42,25 @@ hipcc -w shared.hip  -o shared   -DROWS=1024 -DCOLS=1024 -DBLOCKSIZE=1024
 hipcc -w sgemv.hip  -o sgemv  -DROWS=1024 -DCOLS=1024 -DBLOCKSIZE=1024
 
 hipcc -w event.hip  -o event  
+
+rocprof  --hip-trace  --hsa-trace --verbose ./streams
+
+hipcc -w managed.hip  -o managed
+hipcc -w managed2.hip -o managed2
+hipcc -w managed_matmul.hip -o managed_matmul
+hipcc -w shfl_transpose.hip     -o shfl_transpose
+
+hipcc -w shfl1.hip  -o shfl1 -DN=16
+hipcc -w shfl2.hip  -o shfl2 -DN=64 -DWIDTH=8
+
+
+
+
+
+
+
+
+
 
 
 
