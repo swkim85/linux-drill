@@ -52,8 +52,14 @@ hipcc -w shfl_transpose.hip     -o shfl_transpose
 
 hipcc -w shfl1.hip  -o shfl1 -DN=16
 hipcc -w shfl2.hip  -o shfl2 -DN=64 -DWIDTH=8
+hipcc -w shfl3.hip  -o shfl3 -DN=32 -DWIDTH=16
+hipcc -w shfl4.hip  -o shfl4 -DN=32 -DWIDTH=16
 
+hipcc -w atomic1.hip   -o atomic1
+hipcc -w atomic2.hip   -o atomic2
 
+hipcc -w allany.hip   -o allany
+hipcc -w ballot.hip   -o ballot
 
 
 

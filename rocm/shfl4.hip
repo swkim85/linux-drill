@@ -1,15 +1,18 @@
-// shfl2.hip
+// shfl4.hip
 #include <hip/hip_runtime.h>
 #include <iostream>
 
-#define N 64
-#define WIDTH 8
+#define N 32
+#define WIDTH 16
 
 __global__ void shflKernel(float* in, float* out, int mod) {
   int idx = threadIdx.x + blockIdx.x * blockDim.x;
   if (idx < N) {
     float val = in[idx];
-    val = __shfl(val, idx % mod, WIDTH);
+    val += __shfl_down(val, 8, WIDTH);
+    val += __shfl_down(val, 4, WIDTH);
+    val += __shfl_down(val, 2, WIDTH);
+    val += __shfl_down(val, 1, WIDTH);
     out[idx] = val;
   }
 }
