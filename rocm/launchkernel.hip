@@ -13,9 +13,9 @@ struct MyStruct {
   int blockdim_id;
 };
 
-__global__ void myKernel(int *data, MyStruct *kinfo) {
+__global__ void myKernel(int *data, MyStruct *kinfo, int n) {
   int idx = threadIdx.x + blockIdx.x * blockDim.x;
-  if (idx < N) {
+  if (idx < n) {
     kinfo[idx].idx = idx;
     kinfo[idx].thread_id   = threadIdx.x;
     kinfo[idx].block_id    = blockIdx.x;
@@ -54,9 +54,9 @@ int main() {
   int krninfo_size = N * sizeof(struct MyStruct);
   hipMalloc((void**)&d_krnInfo, krninfo_size); // 디바이스 메모리 할당(kernel info)
 
-  // Kernel 실행: N개의 스레드를 1개의 블록에서 실행
-  myKernel<<<GRIDSIZE, BLOCKSIZE>>>(deviceData, d_krnInfo);
-  //hipLaunchKernelGGL(myKernel, GRIDSIZE, BLOCKSIZE, 0, 0, deviceData, d_krnInfo);
+  // Kernel 실행
+  myKernel<<<GRIDSIZE, BLOCKSIZE>>>(deviceData, d_krnInfo, N);
+  //hipLaunchKernelGGL(myKernel, GRIDSIZE, BLOCKSIZE, 0, 0, deviceData, d_krnInfo, N);
   hipDeviceSynchronize();
 
   hipMemcpy(h_krnInfo, d_krnInfo, krninfo_size, hipMemcpyDeviceToHost); // device -> host (krninfo)

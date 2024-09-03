@@ -70,6 +70,7 @@ hipcc -w shfl_transpose.hip     -o shfl_transpose
 
 hipcc -w atomic1.hip   -o atomic1
 hipcc -w atomic2.hip   -o atomic2
+hipcc -w atomic3.hip   -o atomic3
 
 
 # 워프 단위 리덕션
@@ -96,8 +97,10 @@ AMD_LOG_LEVEL=4 ./sort1
 
 # applications - pattern
 
-g++ pattern.cpp -o pattern
+g++ pattern1.cpp -o pattern1
+g++ pattern2.cpp -o pattern2
+hipcc -w pattern3.hip -o pattern3
+hipcc -w memcopy.hip -o memcopy
 
-hipcc -w pattern2.hip  -o pattern2  ; ./pattern2
 
 

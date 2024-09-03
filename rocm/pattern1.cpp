@@ -4,8 +4,6 @@
 
 #define MAX 4
 
-//#define DATA_SIZE    1048576    // 1024*1024
-//#define PATTERN_SIZE 1000
 #define DATA_SIZE    1024000
 #define PATTERN_SIZE 5
 
