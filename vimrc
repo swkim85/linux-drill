@@ -30,7 +30,7 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 set paste
 set hlsearch
 
-set nowrap
+"set nowrap
 set textwidth=0
 set wrapmargin=0
 

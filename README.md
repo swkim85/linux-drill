@@ -7,3 +7,5 @@
 - simd : SIMD programming
 - opti : optimization
 - openmp : pthread and openmp
+- openacc : openacc
+- rocm : rocm hip 
