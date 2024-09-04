@@ -43,10 +43,12 @@ alias gs='git status'
 alias gcm='git commit -m "no message"'
 alias gpp='git push'
 
-alias go='cd ~/linux-drill/openmp'
+alias go='cd ~/linux-drill/rocm'
 alias go1='cd /usr/lib/gcc/x86_64-linux-gnu/11/include'
+alias go1='cd /opt/rocm-6.2.0/include/hip/'
 
 
 export ROCM_PATH=/opt/rocm-6.2.0
 export PATH=$PATH:$ROCM_PATH/bin:$ROCM_PATH/llvm/bin
+
 
