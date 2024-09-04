@@ -110,6 +110,8 @@ rocprof  --hip-trace  --hsa-trace --verbose ./pattern3
 # applications - graph
 
 g++  graph1.cpp -o graph1
+./graph1 < graph1.txt
+
 hipcc -w graph2.hip -o graph2
 ./graph2 < graph1.txt
 

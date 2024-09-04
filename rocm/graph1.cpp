@@ -3,12 +3,18 @@
 #include <vector>
 #include <algorithm>
 
-using namespace std;
-
 // Function to perform DFS and find the longest path
-void dfs(int node, vector<vector<int>>& adj, vector<bool>& visited, int currentLength, int& maxLength) {
+void dfs(int node, std::vector<std::vector<int>>& adj, std::vector<bool>& visited, int currentLength, int& maxLength) {
   visited[node] = true;
-  maxLength = max(maxLength, currentLength);
+  maxLength = std::max(maxLength, currentLength);
+
+/*
+  std::cout
+   << " node : " << node
+   << " currentLength : " << currentLength
+   << " maxLength : " << maxLength
+   << std::endl;
+*/
 
   for (int neighbor : adj[node]) {
     if (!visited[neighbor]) {
@@ -18,27 +24,39 @@ void dfs(int node, vector<vector<int>>& adj, vector<bool>& visited, int currentL
   visited[node] = false;
 }
 
+void print_adj(std::vector<std::vector<int>>& adj) {
+    for (size_t i = 0; i < adj.size(); ++i) {
+        std::cout << "Node " << i << ": ";
+        for (size_t j = 0; j < adj[i].size(); ++j) {
+            std::cout << adj[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
 int main() {
   int n, m; // n: number of vertices, m: number of edges
-  cin >> n >> m;
-  cout << "number of nodes : " << n << endl;
-  cout << "number of edges : " << m << endl;
+  std::cin >> n >> m;
+  std::cout << "number of nodes : " << n << std::endl;
+  std::cout << "number of edges : " << m << std::endl;
 
-  vector<vector<int>> adj(n);
+  std::vector<std::vector<int>> adj(n);
   for (int i = 0; i < m; ++i) {
     int u, v;
-    cin >> u >> v;
+    std::cin >> u >> v;
     adj[u].push_back(v);
     adj[v].push_back(u); // If the graph is undirected
   }
+  print_adj(adj);
 
   int maxLength = 0;
-  vector<bool> visited(n, false);
+  std::vector<bool> visited(n, false);
 
   for (int i = 0; i < n; ++i) {
+    std::cout << " node : " << i << std::endl;
     dfs(i, adj, visited, 0, maxLength);
   }
 
-  cout << "The longest path length is: " << maxLength << endl;
+  std::cout << "The longest path length is: " << maxLength << std::endl;
   return 0;
 }
