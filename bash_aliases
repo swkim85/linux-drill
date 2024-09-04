@@ -16,6 +16,7 @@
 #
 
 # git clone https://github.com/swkim85/linux-drill
+# git clone git@github.com:swkim85/linux-drill.git  
 
 alias vienv='vi ~/.bash_aliases ; source ~/.bash_aliases'
 alias ll='ls -la'

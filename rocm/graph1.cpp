@@ -21,6 +21,8 @@ void dfs(int node, vector<vector<int>>& adj, vector<bool>& visited, int currentL
 int main() {
   int n, m; // n: number of vertices, m: number of edges
   cin >> n >> m;
+  cout << "number of nodes : " << n << endl;
+  cout << "number of edges : " << m << endl;
 
   vector<vector<int>> adj(n);
   for (int i = 0; i < m; ++i) {
