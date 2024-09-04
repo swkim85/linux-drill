@@ -14,6 +14,9 @@
 #   ln -s ~/linux-drill/vimrc  ~/.vimrc
 #   source    ~/.bash_aliases
 #
+
+# git clone https://github.com/swkim85/linux-drill
+
 alias vienv='vi ~/.bash_aliases ; source ~/.bash_aliases'
 alias ll='ls -la'
 alias lr='ls -ltr'
