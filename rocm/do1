@@ -86,8 +86,12 @@ AMD_LOG_LEVEL=3 ./bandwidth
 
 (AMD_LOG_LEVEL=3 ./bandwidth &> a) ; (cat a | awk '{ print substr($0,83) }')
 
-
 (AMD_LOG_LEVEL=4 ./streams &> a) ; (cat a | grep -i queue )
+
+# 난수
+
+hipcc -w rng.hip -o rng
+
 
 # applications - sort
 
@@ -101,6 +105,13 @@ g++ pattern1.cpp -o pattern1
 g++ pattern2.cpp -o pattern2
 hipcc -w pattern3.hip -o pattern3
 hipcc -w memcopy.hip -o memcopy
+rocprof  --hip-trace  --hsa-trace --verbose ./pattern3
+
+# applications - graph
+
+g++  graph1.cpp -o graph1
+hipcc -w graph2.hip -o graph2
+./graph2 < graph1.txt
 
 
 
