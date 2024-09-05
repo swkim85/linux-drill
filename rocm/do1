@@ -99,6 +99,8 @@ hipcc -w sort1.hip  -o sort1 ; ./sort1
 rocprof  --hip-trace  --hsa-trace --verbose ./sort1
 AMD_LOG_LEVEL=4 ./sort1
 
+hipcc -w sort2.hip  -o sort2 ; ./sort2
+
 # applications - pattern
 
 g++ pattern1.cpp -o pattern1

@@ -1,4 +1,4 @@
-// sort1.hip
+// sort2.hip
 #include <hip/hip_runtime.h>
 #include <iostream>
 #include <random>
@@ -9,9 +9,42 @@
     exit(1); \
   }
 
+const int ARRAY_SIZE = 32;
 //const int ARRAY_SIZE = 1024;
-const int ARRAY_SIZE = 2048;
+//const int ARRAY_SIZE = 2048;
 //const int ARRAY_SIZE = 4096;
+
+void print_vec(std::string title, int *data, int n) {
+  if (title.length()) std::cout << title ;
+  std::cout << " [ ";
+  for (int i = 0; i < n; ++i) std::cout << data[i] << " ";
+  std::cout << " ]" << std::endl;
+}
+
+void initialize_vector(int *data, int n) {
+  for (int i = 0; i < n; i++) {
+    data[i] = n - i;
+  }
+}
+
+void initialize_vector_random(int *data, int n) {
+  std::random_device  rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(1, 10000);
+  for (int i = 0; i < n; i++) {
+    data[i] = dis(gen);
+  }
+}
+
+bool is_sorted(int *arr, int size) {
+  for (int i = 0; i < size - 1; i++) {
+    if (arr[i] > arr[i + 1]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 
 //  i =   0  1  2  3  4  5 ...
 // step = 0  1  0  1  0  1 ...
@@ -55,38 +88,15 @@ void hipSort(int* data, int n) {
   // step = 0  1  0  1  0  1 ...
   for (int i = 0; i < n; i++) {
     bubbleSortKernel<<<grid, block>>>(d_data, n, i % 2);
-    HIP_CHECK(hipGetLastError());
+
+    hipMemcpy(data, d_data, n * sizeof(int), hipMemcpyDeviceToHost);
+    print_vec("", data, n);
   }
 
-  HIP_CHECK(hipMemcpy(data, d_data, n * sizeof(int), hipMemcpyDeviceToHost));
-  HIP_CHECK(hipFree(d_data));
+  //hipMemcpy(data, d_data, n * sizeof(int), hipMemcpyDeviceToHost);
+  hipFree(d_data);
 }
 
-
-void print_vec(std::string title, int *data, int n) {
-  if (title.length()) std::cout << title ;
-  std::cout << " [ ";
-  for (int i = 0; i < n; ++i) std::cout << data[i] << " ";
-  std::cout << " ]" << std::endl;
-}
-
-void initialize_vector(int *data, int n) {
-  std::random_device  rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<> dis(1, 10000);
-  for (int i = 0; i < n; i++) {
-    data[i] = dis(gen);
-  }
-}
-
-bool is_sorted(int *arr, int size) {
-  for (int i = 0; i < size - 1; i++) {
-    if (arr[i] > arr[i + 1]) {
-      return false;
-    }
-  }
-  return true;
-}
 
 int main() {
   constexpr unsigned int n = ARRAY_SIZE;
