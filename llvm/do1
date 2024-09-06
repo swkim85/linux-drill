@@ -1,0 +1,19 @@
+
+clang  helloworld.c  -o helloworld
+clang -emit-llvm  -c helloworld.c -o helloworld.bc 
+clang -emit-llvm -S helloworld.c  -o helloworld.ll
+clang  helloworld.ll  -o helloworld2
+llvm-as  helloworld.ll  -o helloworld.bc
+llvm-dis  helloworld.bc  -o helloworld.ll
+llc  helloworld.bc  -o helloworld.s
+
+
+clang -emit-llvm -S ex1.c  -o ex1.ll
+vi -d helloworld.ll ex1.ll 
+
+
+clang++ -g -O3 toy.cpp  -o toy
+./toy < a
+
+clang++ -g -O3 toy2.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o toy2
+
