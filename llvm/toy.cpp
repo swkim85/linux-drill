@@ -333,8 +333,10 @@ static std::unique_ptr<PrototypeAST> ParsePrototype() {
     return LogErrorP("Expected '(' in prototype");
 
   std::vector<std::string> ArgNames;
-  while (getNextToken() == tok_identifier)
+  while (getNextToken() == tok_identifier) {
+    std::cout << " IdentifierStr :" << IdentifierStr << std::endl;
     ArgNames.push_back(IdentifierStr);
+  }
   if (CurTok != ')')
     return LogErrorP("Expected ')' in prototype");
 

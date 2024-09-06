@@ -15,5 +15,8 @@ vi -d helloworld.ll ex1.ll
 clang++ -g -O3 toy.cpp  -o toy
 ./toy < a
 
+clang++ -g -O3 toy.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o toy
 clang++ -g -O3 toy2.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o toy2
+clang++ -g -O3 ch5.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o ch5
+clang++ -g -O3 ch8.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o ch8
 
