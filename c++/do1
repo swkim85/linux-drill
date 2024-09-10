@@ -3,3 +3,10 @@ g++  -o vector  vector.cpp --save-temps
 
 
 g++  -o vecimpl  vecimpl.cpp --save-temps
+
+g++  -o ptr1     ptr1.cpp
+g++  -o ptr2     ptr2.cpp
+g++  -o ptr3     ptr3.cpp
+g++  -o ptr4     ptr4.cpp
+
+
