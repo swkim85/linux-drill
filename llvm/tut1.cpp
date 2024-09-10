@@ -8,6 +8,8 @@
 #include <utility>
 #include <vector>
 
+#define DPREFIX "[tut1]"
+
 //===----------------------------------------------------------------------===//
 // Lexer
 //===----------------------------------------------------------------------===//
@@ -167,7 +169,7 @@ public:
 static int CurTok;
 static int getNextToken() {
   CurTok = gettok();
-  //std::cout << CurTok << std::endl;
+  std::cout << DPREFIX << "CurTok : " << CurTok << std::endl;
   return CurTok;
 }
 
@@ -334,7 +336,7 @@ static std::unique_ptr<PrototypeAST> ParsePrototype() {
 
   std::vector<std::string> ArgNames;
   while (getNextToken() == tok_identifier) {
-    std::cout << " IdentifierStr :" << IdentifierStr << std::endl;
+    std::cout << DPREFIX << "IdentifierStr : " << IdentifierStr << std::endl;
     ArgNames.push_back(IdentifierStr);
   }
   if (CurTok != ')')

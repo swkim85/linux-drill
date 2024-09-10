@@ -10,6 +10,7 @@
 #include "llvm/IR/Type.h"
 #include "llvm/IR/Verifier.h"
 #include <algorithm>
+#include <iostream>
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
@@ -17,6 +18,8 @@
 #include <memory>
 #include <string>
 #include <vector>
+
+#define DPREFIX "[tut2]"
 
 using namespace llvm;
 
@@ -190,7 +193,11 @@ public:
 /// token the parser is looking at.  getNextToken reads another token from the
 /// lexer and updates CurTok with its results.
 static int CurTok;
-static int getNextToken() { return CurTok = gettok(); }
+static int getNextToken() {
+  CurTok = gettok();
+  std::cout << DPREFIX << "CurTok : " << CurTok << std::endl;
+  return CurTok;
+}
 
 /// BinopPrecedence - This holds the precedence for each binary operator that is
 /// defined.
@@ -296,11 +303,11 @@ static std::unique_ptr<ExprAST> ParsePrimary() {
 
 /// binoprhs
 ///   ::= ('+' primary)*
-static std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec,
-                                              std::unique_ptr<ExprAST> LHS) {
+static std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec, std::unique_ptr<ExprAST> LHS) {
   // If this is a binop, find its precedence.
   while (true) {
     int TokPrec = GetTokPrecedence();
+    std::cout << DPREFIX << "TokPrec: " << TokPrec << std::endl;
 
     // If this is a binop that binds at least as tightly as the current binop,
     // consume it, otherwise we are done.
@@ -355,8 +362,10 @@ static std::unique_ptr<PrototypeAST> ParsePrototype() {
     return LogErrorP("Expected '(' in prototype");
 
   std::vector<std::string> ArgNames;
-  while (getNextToken() == tok_identifier)
+  while (getNextToken() == tok_identifier) {
+    std::cout << DPREFIX << "IdentifierStr : " << IdentifierStr << std::endl;
     ArgNames.push_back(IdentifierStr);
+  }
   if (CurTok != ')')
     return LogErrorP("Expected ')' in prototype");
 
@@ -491,6 +500,7 @@ Function *FunctionAST::codegen() {
     return nullptr;
 
   // Create a new basic block to start insertion into.
+  std::cout << DPREFIX << "create new BasicBlock 'entry' " << CurTok << std::endl;
   BasicBlock *BB = BasicBlock::Create(*TheContext, "entry", TheFunction);
   Builder->SetInsertPoint(BB);
 

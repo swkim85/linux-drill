@@ -2,7 +2,7 @@
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 "colorscheme blue
-"colorscheme darkblue
+colorscheme darkblue
 "colorscheme default
 "colorscheme delek
 "colorscheme desert
@@ -29,6 +29,9 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 set paste
 set hlsearch
+
+set ruler
+set number
 
 "set nowrap
 set textwidth=0
