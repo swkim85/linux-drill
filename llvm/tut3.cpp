@@ -666,7 +666,8 @@ void myfunc1() {
   //static std::map<std::string, std::unique_ptr<PrototypeAST>> FunctionProtos;
   for (const auto& pair : FunctionProtos) {
     PrototypeAST *pa = pair.second.get();
-    std::cout << pair.first << ": " << pa->getName() << std::endl;
+    std::cout << DPREFIX << "FunctionProtos" << std::endl;
+    std::cout << DPREFIX << pair.first << ": " << pa->getName() << std::endl;
   }
 }
 
@@ -674,6 +675,7 @@ void myfunc1() {
 static void MainLoop() {
   while (true) {
     myfunc1();
+
     fprintf(stderr, "ready> ");
     switch (CurTok) {
     case tok_eof:

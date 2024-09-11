@@ -425,14 +425,19 @@ static std::unique_ptr<ExprAST> ParsePrimary() {
   switch (CurTok) {
   default:
     return LogError("unknown token when expecting an expression");
+
   case tok_identifier:
     return ParseIdentifierExpr();
+
   case tok_number:
     return ParseNumberExpr();
+
   case '(':
     return ParseParenExpr();
+
   case tok_if:
     return ParseIfExpr();
+
   case tok_for:
     return ParseForExpr();
   }
@@ -440,8 +445,7 @@ static std::unique_ptr<ExprAST> ParsePrimary() {
 
 /// binoprhs
 ///   ::= ('+' primary)*
-static std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec,
-                                              std::unique_ptr<ExprAST> LHS) {
+static std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec, std::unique_ptr<ExprAST> LHS) {
   // If this is a binop, find its precedence.
   while (true) {
     int TokPrec = GetTokPrecedence();
@@ -470,8 +474,7 @@ static std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec,
     }
 
     // Merge LHS/RHS.
-    LHS =
-        std::make_unique<BinaryExprAST>(BinOp, std::move(LHS), std::move(RHS));
+    LHS = std::make_unique<BinaryExprAST>(BinOp, std::move(LHS), std::move(RHS));
   }
 }
 
@@ -603,6 +606,8 @@ Value *BinaryExprAST::codegen() {
     return Builder->CreateFSub(L, R, "subtmp");
   case '*':
     return Builder->CreateFMul(L, R, "multmp");
+  case '/':
+    return Builder->CreateFDiv(L, R, "divtmp");
   case '<':
     L = Builder->CreateFCmpULT(L, R, "cmptmp");
     // Convert bool 0/1 to double 0.0 or 1.0
@@ -992,6 +997,7 @@ int main() {
   BinopPrecedence['+'] = 20;
   BinopPrecedence['-'] = 20;
   BinopPrecedence['*'] = 40; // highest.
+  BinopPrecedence['/'] = 40; // highest.
 
   // Prime the first token.
   fprintf(stderr, "ready> ");

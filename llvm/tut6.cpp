@@ -22,6 +22,7 @@
 #include "llvm/Transforms/Scalar/Reassociate.h"
 #include "llvm/Transforms/Scalar/SimplifyCFG.h"
 #include <algorithm>
+#include <iostream>
 #include <cassert>
 #include <cctype>
 #include <cstdint>
@@ -31,6 +32,8 @@
 #include <memory>
 #include <string>
 #include <vector>
+
+#define DPREFIX "[tut6]"
 
 using namespace llvm;
 using namespace llvm::orc;
@@ -301,7 +304,7 @@ static int GetTokPrecedence() {
   return TokPrec;
 }
 
-/// Error* - These are little helper functions for error handling.
+/// LogError* - These are little helper functions for error handling.
 std::unique_ptr<ExprAST> LogError(const char *Str) {
   fprintf(stderr, "Error: %s\n", Str);
   return nullptr;
@@ -453,17 +456,25 @@ static std::unique_ptr<ExprAST> ParseForExpr() {
 ///   ::= ifexpr
 ///   ::= forexpr
 static std::unique_ptr<ExprAST> ParsePrimary() {
+
   switch (CurTok) {
+
   default:
+    std::cout << DPREFIX << "unknown toke " <<  CurTok << std::endl;
     return LogError("unknown token when expecting an expression");
+
   case tok_identifier:
     return ParseIdentifierExpr();
+
   case tok_number:
     return ParseNumberExpr();
+
   case '(':
     return ParseParenExpr();
+
   case tok_if:
     return ParseIfExpr();
+
   case tok_for:
     return ParseForExpr();
   }
@@ -487,8 +498,7 @@ static std::unique_ptr<ExprAST> ParseUnary() {
 
 /// binoprhs
 ///   ::= ('+' unary)*
-static std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec,
-                                              std::unique_ptr<ExprAST> LHS) {
+static std::unique_ptr<ExprAST> ParseBinOpRHS(int ExprPrec, std::unique_ptr<ExprAST> LHS) {
   // If this is a binop, find its precedence.
   while (true) {
     int TokPrec = GetTokPrecedence();
@@ -674,8 +684,10 @@ Value *NumberExprAST::codegen() {
 Value *VariableExprAST::codegen() {
   // Look this variable up in the function.
   Value *V = NamedValues[Name];
-  if (!V)
+  if (!V) {
+    std::cout << DPREFIX << "name : " << Name << std::endl;
     return LogErrorV("Unknown variable name");
+  }
   return V;
 }
 
@@ -706,6 +718,8 @@ Value *BinaryExprAST::codegen() {
     return Builder->CreateFMul(L, R, "multmp");
   case '<':
     L = Builder->CreateFCmpULT(L, R, "cmptmp");
+  case '>':
+    L = Builder->CreateFCmpULT(R, L, "cmptmp");
     // Convert bool 0/1 to double 0.0 or 1.0
     return Builder->CreateUIToFP(L, Type::getDoubleTy(*TheContext), "booltmp");
   default:
@@ -1048,9 +1062,21 @@ static void HandleTopLevelExpression() {
   }
 }
 
+// FunctionProtos 출력하기
+void myfunc1() {
+  //static std::map<std::string, std::unique_ptr<PrototypeAST>> FunctionProtos;
+  std::cout << DPREFIX << "FunctionProtos" << std::endl;
+  for (const auto& pair : FunctionProtos) {
+    PrototypeAST *pa = pair.second.get();
+    std::cout << DPREFIX << pair.first << ": " << pa->getName() << std::endl;
+  }
+}
+
 /// top ::= definition | external | expression | ';'
 static void MainLoop() {
   while (true) {
+    //myfunc1();
+
     fprintf(stderr, "ready> ");
     switch (CurTok) {
     case tok_eof:
@@ -1105,6 +1131,7 @@ int main() {
   // Install standard binary operators.
   // 1 is lowest precedence.
   BinopPrecedence['<'] = 10;
+  BinopPrecedence['>'] = 10;
   BinopPrecedence['+'] = 20;
   BinopPrecedence['-'] = 20;
   BinopPrecedence['*'] = 40; // highest.
