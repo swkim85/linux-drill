@@ -697,8 +697,15 @@ Value *UnaryExprAST::codegen() {
     return nullptr;
 
   Function *F = getFunction(std::string("unary") + Opcode);
-  if (!F)
+  if (!F) {
+    std::cout << DPREFIX << " Opcode : " << Opcode << std::endl;
     return LogErrorV("Unknown unary operator");
+  }
+
+// sangwan
+  //if (Opcode == '-') {
+    //return Builder->CreateFNeg(OperandV, "negtmp");
+  //}
 
   return Builder->CreateCall(F, OperandV, "unop");
 }
@@ -718,8 +725,9 @@ Value *BinaryExprAST::codegen() {
     return Builder->CreateFMul(L, R, "multmp");
   case '<':
     L = Builder->CreateFCmpULT(L, R, "cmptmp");
+    return Builder->CreateUIToFP(L, Type::getDoubleTy(*TheContext), "booltmp");
   case '>':
-    L = Builder->CreateFCmpULT(R, L, "cmptmp");
+    L = Builder->CreateFCmpUGT(L, R, "cmptmp");
     // Convert bool 0/1 to double 0.0 or 1.0
     return Builder->CreateUIToFP(L, Type::getDoubleTy(*TheContext), "booltmp");
   default:
@@ -738,8 +746,10 @@ Value *BinaryExprAST::codegen() {
 Value *CallExprAST::codegen() {
   // Look up the name in the global module table.
   Function *CalleeF = getFunction(Callee);
-  if (!CalleeF)
+  if (!CalleeF) {
+    std::cout << DPREFIX << "function : " << Callee << std::endl;
     return LogErrorV("Unknown function referenced");
+  }
 
   // If argument mismatch error.
   if (CalleeF->arg_size() != Args.size())

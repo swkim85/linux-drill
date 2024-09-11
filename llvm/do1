@@ -1,4 +1,6 @@
 
+# Clang
+
 clang  helloworld.c  -o helloworld
 clang -emit-llvm  -c helloworld.c -o helloworld.bc 
 clang -emit-llvm -S helloworld.c  -o helloworld.ll
@@ -10,13 +12,48 @@ llc  helloworld.bc  -o helloworld.s
 
 clang -emit-llvm -S ex1.c  -o ex1.ll
 vi -d helloworld.ll ex1.ll 
+clang -Xclang -ast-dump -fsyntax-only  helloworld.c
 
 
-clang++ -g -O3 toy.cpp  -o toy
-./toy < a
+# Lexer
 
-clang++ -g -O3 toy.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o toy
-clang++ -g -O3 toy2.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o toy2
-clang++ -g -O3 ch5.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o ch5
-clang++ -g -O3 ch8.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o ch8
+clang++ -g -O3 tut1.cpp  -o tut1
+
+# Parser and AST
+
+clang++ -g -O3 tut2.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o tut2
+
+# Optimization, JIT
+
+clang++ -g -O3 tut3.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` -o tut3
+
+# control flow  if/then/else for
+
+gcc -c -fpic star.c
+gcc -shared -o libstar.so star.o
+
+clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` \
+   tut5.cpp -o tut5 -lstar -L.
+
+export LD_LIBRARY_PATH=.
+./tut5
+
+# user-defined operator
+
+clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` \
+   tut6.cpp -o tut6 -lstar -L.
+
+export LD_LIBRARY_PATH=.
+./tut6
+
+
+
+
+clang++ -g -O3 tut6.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` -o tut6
+clang++ -g -O3 tut7.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` -o tut7
+
+clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` \
+   tut8.cpp -o tut8 -lstar -L.
+
+
 
