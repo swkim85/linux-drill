@@ -664,10 +664,22 @@ static void HandleTopLevelExpression() {
 // FunctionProtos 출력하기
 void myfunc1() {
   //static std::map<std::string, std::unique_ptr<PrototypeAST>> FunctionProtos;
+  std::cout << DPREFIX << "FunctionProtos" << std::endl;
   for (const auto& pair : FunctionProtos) {
     PrototypeAST *pa = pair.second.get();
-    std::cout << DPREFIX << "FunctionProtos" << std::endl;
     std::cout << DPREFIX << pair.first << ": " << pa->getName() << std::endl;
+  }
+}
+
+// NamedValues 출력하기
+//static std::map<std::string, Value *> NamedValues;
+void myfunc2() {
+  std::cout << DPREFIX << "Current NamedValues :" << "\n";
+  for (const auto& pair : NamedValues) {
+    Value *v = pair.second;
+    std::cout << typeid(v).name() << "\n";
+    //pair.second->print(llvm::outs());
+    //llvm::outs() << DPREFIX << pair.first << ": " << pair.second->print(llvm::outs()) << "\n";
   }
 }
 
@@ -675,6 +687,7 @@ void myfunc1() {
 static void MainLoop() {
   while (true) {
     myfunc1();
+    //myfunc2();
 
     fprintf(stderr, "ready> ");
     switch (CurTok) {

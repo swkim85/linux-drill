@@ -1227,9 +1227,9 @@ int main() {
   InitializeAllAsmParsers();
   InitializeAllAsmPrinters();
 
-  //auto TargetTriple = sys::getDefaultTargetTriple();
+  auto TargetTriple = sys::getDefaultTargetTriple();
   //auto TargetTriple = "x86_64-pc-linux-gnu";
-  auto TargetTriple = "armv6k-unknown-linux-gnueabihf";
+  //auto TargetTriple = "armv6k-unknown-linux-gnueabihf";
   TheModule->setTargetTriple(TargetTriple);
 
   std::string Error;

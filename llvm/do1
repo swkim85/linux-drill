@@ -14,7 +14,6 @@ clang -emit-llvm -S ex1.c  -o ex1.ll
 vi -d helloworld.ll ex1.ll 
 clang -Xclang -ast-dump -fsyntax-only  helloworld.c
 
-
 # Lexer
 
 clang++ -g -O3 tut1.cpp  -o tut1
@@ -46,14 +45,27 @@ clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcji
 export LD_LIBRARY_PATH=.
 ./tut6
 
+# variables
 
+clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` -lstar -L. \
+   tut7.cpp -o tut7 
+export LD_LIBRARY_PATH=.
+./tut7
 
-
-clang++ -g -O3 tut6.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` -o tut6
-clang++ -g -O3 tut7.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` -o tut7
+# compile to object code
 
 clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` \
-   tut8.cpp -o tut8 -lstar -L.
+   tut8.cpp -o tut8 
+
+./tut8 < average.kal
+file output.o
+clang++ average_main.cpp output.o -o average_main 
+./average_main
+
+# debug info
+
+clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` \
+   tut9.cpp -o tut9 
 
 
 
