@@ -1,12 +1,28 @@
 
+
+
+# Address Sanitizer(ASan)
+
+g++  -fsanitize=address   -o leak     leak.cpp  
+./leak
+
+# <vector>
+
 g++  -o vector  vector.cpp --save-temps
+g++  -o vecimpl  vecimpl.cpp
 
-
-g++  -o vecimpl  vecimpl.cpp --save-temps
+# unique_ptr
 
 g++  -o ptr1     ptr1.cpp ; ./ptr1
 g++  -o ptr2     ptr2.cpp ; ./ptr2
 g++  -o ptr3     ptr3.cpp ; ./ptr3
 g++  -o ptr4     ptr4.cpp ; ./ptr4
+
+# typeinfo
+
+g++  -o typeinfo   typeinfo.cpp
+g++  -o typeinfo  -fno-rtti  typeinfo.cpp 
+./typeinfo
+
 
 
