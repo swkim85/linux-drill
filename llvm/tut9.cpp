@@ -1446,8 +1446,7 @@ int main() {
   // Currently down as "fib.ks" as a filename since we're redirecting stdin
   // but we'd like actual source locations.
   KSDbgInfo.TheCU = DBuilder->createCompileUnit(
-      dwarf::DW_LANG_C, DBuilder->createFile("fib.ks", "."),
-      "Kaleidoscope Compiler", false, "", 0);
+      dwarf::DW_LANG_C, DBuilder->createFile("fib.ks", "."), "Kaleidoscope Compiler", false, "", 0);
 
   // Run the main "interpreter loop" now.
   MainLoop();

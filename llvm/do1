@@ -54,6 +54,8 @@ export LD_LIBRARY_PATH=.
 
 # compile to object code
 
+llc -march=x86 -mattr=help
+
 clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` \
    tut8.cpp -o tut8 
 
@@ -67,5 +69,8 @@ clang++ average_main.cpp output.o -o average_main
 clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` \
    tut9.cpp -o tut9 
 
+./tut9 < fib.ks |& clang -x ir -o fib -
+
+file fib
 
 
