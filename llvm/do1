@@ -22,6 +22,9 @@ clang++ -g -O3 tut1.cpp  -o tut1
 
 clang++ -g -O3 tut2.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o tut2
 
+clang -Xclang -ast-dump -fsyntax-only test-ast.cc
+
+
 # Optimization, JIT
 
 clang++ -g -O3 tut3.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` -o tut3
