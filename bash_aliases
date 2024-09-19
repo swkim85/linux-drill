@@ -22,6 +22,10 @@ alias vienv='vi ~/.bash_aliases ; source ~/.bash_aliases'
 alias ll='ls -la'
 alias lr='ls -ltr'
 
+# ssh keyfile finger print 
+# ssh-keygen -l -f id_rsa.pub
+
+
 export PS1='\u@ SERVER  :\w\$ '
 #export PS1='$ '
 alias rm='rm -i'
@@ -36,6 +40,7 @@ alias do1='vi do1 ; cat do1'
 alias do2='vi do2 ; cat do2'
 alias do3='vi do3 ; cat do3'
 alias do4='vi do4 ; cat do4'
+alias do11='cat do1'
 
 alias du1='du -h --max-depth=1'
 alias du2='du -h --max-depth=2'
@@ -47,9 +52,10 @@ alias gs='git status'
 alias gcm='git commit -m "no message"'
 alias gpp='git push'
 
-alias go='cd ~/linux-drill/rocm'
-alias go1='cd /usr/lib/gcc/x86_64-linux-gnu/11/include'
-alias go1='cd /opt/rocm-6.2.0/include/hip/'
+alias go='cd ~/linux-drill/llvm'
+alias go2='cd ~/linux-drill/c++'
+alias go1='cd /home/ubuntu/llvm-project/llvm/examples/Kaleidoscope'
+alias vi1='vi -d tut9.cpp  tut8.cpp'
 
 
 export ROCM_PATH=/opt/rocm-6.2.0
