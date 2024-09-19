@@ -48,6 +48,9 @@ clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcji
 export LD_LIBRARY_PATH=.
 ./tut6
 
+./tut6 < mandelbrot.kal
+
+
 # variables
 
 clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` -lstar -L. \
