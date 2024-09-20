@@ -28,12 +28,18 @@ int main() {
     h_data[i] = static_cast<float>(i);
   }
   
-  // 호스트 -> 디바이스 전송 시간 측정
+  // 호스트 -> 디바이스 전송 시간 측정(1)
   auto start = std::chrono::high_resolution_clock::now();
   HIP_CHECK(hipMemcpy(d_data, h_data, DATA_SIZE, hipMemcpyHostToDevice));
   HIP_CHECK(hipDeviceSynchronize());
   auto end = std::chrono::high_resolution_clock::now();
-  
+
+  // 호스트 -> 디바이스 전송 시간 측정(2)
+  start = std::chrono::high_resolution_clock::now();
+  HIP_CHECK(hipMemcpy(d_data, h_data, DATA_SIZE, hipMemcpyHostToDevice));
+  HIP_CHECK(hipDeviceSynchronize());
+  end = std::chrono::high_resolution_clock::now();
+
   std::chrono::duration<double> h2d_time = end - start;
   
   // 디바이스 -> 호스트 전송 시간 측정

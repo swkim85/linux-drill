@@ -6,8 +6,8 @@
 #define BLOCKSIZE 1024
 //#define ROWS 4096
 //#define COLS 4096
-#define ROWS 16
-#define COLS 16
+//#define ROWS 16
+//#define COLS 16
 
 #define HIP_CHECK(status) \
   if (status != hipSuccess) { \

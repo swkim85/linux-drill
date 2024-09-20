@@ -2,12 +2,15 @@
 #include <hip/hip_runtime.h>
 #include <iostream>
 #include <chrono>
+
 #define HIP_CHECK(status) \
   if (status != hipSuccess) { \
   std::cerr << "HIP error: " << hipGetErrorString(status) << std::endl; \
   exit(1); \
   }
+
 //#define NSIZE 100000
+
 __global__ void saxpy_kernel(const float a, const float* d_x, float* d_y, const unsigned int size)
 {
   const unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -49,6 +52,9 @@ int main()
   float* d_y;
   HIP_CHECK(hipMalloc(&d_x, size_bytes));
   HIP_CHECK(hipMalloc(&d_y, size_bytes));
+
+// warm-up
+  HIP_CHECK(hipMemcpy(d_x, h_x, size_bytes, hipMemcpyHostToDevice));
 
   auto t0start = std::chrono::high_resolution_clock::now(); // 시간측정 시작
   HIP_CHECK(hipMemcpy(d_x, h_x, size_bytes, hipMemcpyHostToDevice));

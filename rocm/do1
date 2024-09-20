@@ -1,59 +1,69 @@
 
+# hello world
+hipcc -w  hello.cpp -o hello 
+./hello
 
-# 메모리 관리
-hipcc   -o bandwidth  bandwidth.hip  -DDSIZE=1048576   # 1MB
-hipcc   -o bandwidth  bandwidth.hip  -DDSIZE=1073741824  # 1GB
-hipcc   -o bandwidth  bandwidth.hip  -DDSIZE=2147483648  # 2GB
-hipcc   -o bandwidth  bandwidth.hip  -DDSIZE=4294967296  # 4GB
-hipcc   -o bandwidth  bandwidth.hip  -DDSIZE=7516192768  # 7GB
-hipcc   -o bandwidth  bandwidth.hip  -DDSIZE=8053063680  # 7.5GB
+hipcc -w  hip_device_attributes.cpp  -o hip_device_attributes
+./hip_device_attributes
+
+# bandwidth
+
+hipcc   -o bandwidth1m    bandwidth.hip  -DDSIZE=1048576   # 1MB
+hipcc   -o bandwidth1g    bandwidth.hip  -DDSIZE=1073741824  # 1GB
+hipcc   -o bandwidth2g    bandwidth.hip  -DDSIZE=2147483648  # 2GB
+hipcc   -o bandwidth4g    bandwidth.hip  -DDSIZE=4294967296  # 4GB
+hipcc   -o bandwidth7g    bandwidth.hip  -DDSIZE=7516192768  # 7GB
+hipcc   -o bandwidth7.5g  bandwidth.hip  -DDSIZE=8053063680  # 7.5GB
+hipcc   -o bandwidth8g    bandwidth.hip  -DDSIZE=8589934592   # 8GB (out of memory)
 
 hipcc -w  copy.hip  -o copy
 
 
-# 커널
-hipcc -w launchkernel.hip  -o launchkernel -DGRIDSIZE=1 -DBLOCKSIZE=3 -DN=3 ; ./launchkernel
-hipcc -w launchkernel.hip  -o launchkernel -DGRIDSIZE=2 -DBLOCKSIZE=3 -DN=6 ; ./launchkernel
-hipcc -w launchkernel.hip  -o launchkernel -DGRIDSIZE=2 -DBLOCKSIZE=1024 -DN=2048 ; ./launchkernel
+# kernels
 
+hipcc -w launchkernel.hip  -o launchkernel.1.3     -DGRIDSIZE=1 -DBLOCKSIZE=3 -DN=3 ; ./launchkernel
+hipcc -w launchkernel.hip  -o launchkernel.2.3     -DGRIDSIZE=2 -DBLOCKSIZE=3 -DN=6 ; ./launchkernel
+hipcc -w launchkernel.hip  -o launchkernel.2.1024  -DGRIDSIZE=2 -DBLOCKSIZE=1024 -DN=2048 ; ./launchkernel
 
 rocminfo | grep "Workgroup Max Size"
 
 hipcc -w transpose.hip -o transpose ; ./transpose 
 
 
-# 성능 측정
+# performance
 
 hipcc -w saxpy.hip  -o saxpy --save-temps
-hipcc -w saxpy2.hip  -o saxpy2
+hipcc -w saxpy2.hip  -o saxpy2 -DNSIZE=100000
 
-hipcc -w sgemv.hip  -o sgemv  -DROWS=1024 -DCOLS=1024 -DBLOCKSIZE=1024
+hipcc -w sgemv.hip  -o sgemv8x8        -DROWS=8    -DCOLS=8      -DBLOCKSIZE=1024
+hipcc -w sgemv.hip  -o sgemv16x16      -DROWS=16   -DCOLS=16     -DBLOCKSIZE=1024
+hipcc -w sgemv.hip  -o sgemv1024x1024  -DROWS=1024 -DCOLS=1024   -DBLOCKSIZE=1024
 
-# 공유 메모리
+# shared memory
 
-hipcc -w shared.hip  -o shared   -DROWS=1024 -DCOLS=1024 -DBLOCKSIZE=256
-hipcc -w shared.hip  -o shared   -DROWS=1024 -DCOLS=1024 -DBLOCKSIZE=512
-hipcc -w shared.hip  -o shared   -DROWS=1024 -DCOLS=1024 -DBLOCKSIZE=1024
+hipcc -w shared.hip  -o shared.256   -DROWS=1024 -DCOLS=1024 -DBLOCKSIZE=256
+hipcc -w shared.hip  -o shared.512   -DROWS=1024 -DCOLS=1024 -DBLOCKSIZE=512
+hipcc -w shared.hip  -o shared.1024  -DROWS=1024 -DCOLS=1024 -DBLOCKSIZE=1024
 
-$ roc-obj-ls -v ./shared
-$ roc-obj -d ./shared
-$ cat shared:1.hipv4-amdgcn-amd-amdhsa--gfx1011.s
+roc-obj-ls -v   ./shared
+roc-obj -d   ./shared
+cat shared:1.hipv4-amdgcn-amd-amdhsa--gfx1011.s
 
-# 스트림
+# streams
 
 hipcc -w streams.hip  -o streams;  ./streams
 
 rocprof  --hip-trace  --hsa-trace --verbose ./streams
 
 
-# 관리형 메모리
+# managed memory
 
 hipcc -w managed.hip  -o managed
 hipcc -w managed2.hip -o managed2
 hipcc -w managed_matmul.hip -o managed_matmul
 
 
-# 워프내 셔플
+# shuffle
 
 hipcc -w shfl1.hip -DN=16  -o shfl1
 hipcc -w shfl1.hip -DN=64  -o shfl1
@@ -66,20 +76,20 @@ hipcc -w shfl4.hip  -o shfl4 -DN=32 -DWIDTH=16
 hipcc -w shfl_transpose.hip     -o shfl_transpose
 
 
-# 원자적 함수
+# atomic
 
 hipcc -w atomic1.hip   -o atomic1
 hipcc -w atomic2.hip   -o atomic2
 hipcc -w atomic3.hip   -o atomic3
 
 
-# 워프 단위 리덕션
+# reduction
 
 hipcc -w allany.hip   -o allany
 hipcc -w ballot.hip   -o ballot
 
 
-# 로깅
+# logging
 
 hipcc   -o bandwidth  bandwidth.hip  -DDSIZE=1048576   # 1MB
 AMD_LOG_LEVEL=3 ./bandwidth
@@ -88,7 +98,7 @@ AMD_LOG_LEVEL=3 ./bandwidth
 
 (AMD_LOG_LEVEL=4 ./streams &> a) ; (cat a | grep -i queue )
 
-# 난수
+# random number generator
 
 hipcc -w rng.hip -o rng
 
