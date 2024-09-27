@@ -1,9 +1,41 @@
 
-mkdir Step1_build
-cd Step1_build
-
+# STEP1
+mkdir Step1_build ; cd Step1_build
 rm -rf CMakeCache.txt CMakeFiles
-
+rm -rf CMakeCache.txt CMakeFiles ; cmake ../Step1
 cmake ../Step1
+cmake --trace ../Step1
+cmake --build .
+make -n
+./Tutorial 10000
 
+
+# STEP2
+mkdir Step2_build ; cd Step2_build
+cmake --fresh ../Step2 -DUSE_MYMATH=OFF ; cmake --build .
+nm Tutorial | egrep "sqrt|mysqrt"
+cmake --fresh ../Step2 ; cmake --build .
+nm Tutorial | egrep "sqrt|mysqrt"
+./Tutorial 10000
+
+# STEP3
+mkdir Step3_build ; cd Step3_build
+cmake --fresh ../Step3 -DUSE_MYMATH=ON ; cmake --build .
+make -n
+
+# STEP4
+mkdir Step4_build ; cd Step4_build
+cmake --fresh ../Step4  ; cmake --build .
+
+# STEP5
+mkdir Step5_build ; cd Step5_build
+
+# STEP6
+mkdir Step6_build ; cd Step6_build
+
+
+# COMPLETE
+mkdir Complete_build ; cd Complete_build
+cmake ../Complete
+make
 
