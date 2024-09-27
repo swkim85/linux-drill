@@ -1,0 +1,9 @@
+
+mkdir Step1_build
+cd Step1_build
+
+rm -rf CMakeCache.txt CMakeFiles
+
+cmake ../Step1
+
+
