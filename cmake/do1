@@ -29,9 +29,15 @@ cmake --fresh ../Step4  ; cmake --build .
 
 # STEP5
 mkdir Step5_build ; cd Step5_build
+cmake --fresh ../Step5  ; cmake --build .
+cmake --install . --prefix "/home/ubuntu/installdir"
+ctest -N
+ctest -VV
 
 # STEP6
 mkdir Step6_build ; cd Step6_build
+cmake --fresh ../Step6  ; cmake --build .
+ctest -VV -D Experimental
 
 
 # COMPLETE

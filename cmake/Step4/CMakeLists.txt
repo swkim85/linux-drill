@@ -20,13 +20,12 @@ set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
 # * For gcc_like_cxx, add flags -Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused
 # * For msvc_cxx, add flags -W3
 # Hint: Use target_compile_options()
-target_compile_options(tutorial_compiler_flags INTERFACE
-  "$<${gcc_like_cxx}:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>"
-  "$<${msvc_cxx}:-W3>"
-)
+#target_compile_options(tutorial_compiler_flags INTERFACE
+#  "$<${gcc_like_cxx}:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>"
+#  "$<${msvc_cxx}:-W3>"
+#)
 
-# TODO 4: With nested generator expressions, only use the flags for the
-# build-tree
+# TODO 4: With nested generator expressions, only use the flags for the build-tree
 # Hint: Use BUILD_INTERFACE
 target_compile_options(tutorial_compiler_flags INTERFACE
   "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>>"

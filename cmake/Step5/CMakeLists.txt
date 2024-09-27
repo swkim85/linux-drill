@@ -34,11 +34,11 @@ target_include_directories(Tutorial PUBLIC
                            "${PROJECT_BINARY_DIR}"
                            )
 
-# TODO 3: Install Tutorial in the bin directory
-# Hint: Use the TARGETS and DESTINATION parameters
+install(TARGETS Tutorial DESTINATION bin)
+install(FILES "${PROJECT_BINARY_DIR}/TutorialConfig.h"
+  DESTINATION include
+  )
 
-# TODO 4: Install TutorialConfig.h to the include directory
-# Hint: Use the FILES and DESTINATION parameters
 
 # TODO 5: Enable testing
 
@@ -57,3 +57,33 @@ target_include_directories(Tutorial PUBLIC
 
 # TODO 9: Add more tests. Create a function called do_test to avoid copy +
 # paste. Test the following values: 4, 9, 5, 7, 25, -25 and 0.0001.
+enable_testing()
+
+add_test(NAME Runs COMMAND Tutorial 25)
+
+add_test(NAME Usage COMMAND Tutorial)
+set_tests_properties(Usage
+  PROPERTIES PASS_REGULAR_EXPRESSION "Usage:.*number"
+  )
+
+add_test(NAME StandardUse COMMAND Tutorial 4)
+set_tests_properties(StandardUse
+  PROPERTIES PASS_REGULAR_EXPRESSION "4 is 2"
+  )
+
+function(do_test target arg result)
+  add_test(NAME Comp${arg} COMMAND ${target} ${arg})
+  set_tests_properties(Comp${arg}
+    PROPERTIES PASS_REGULAR_EXPRESSION ${result}
+    )
+endfunction()
+
+# do a bunch of result based tests
+do_test(Tutorial 4 "4 is 2")
+do_test(Tutorial 9 "9 is 3")
+do_test(Tutorial 5 "5 is 2.236")
+do_test(Tutorial 7 "7 is 2.645")
+do_test(Tutorial 25 "25 is 5")
+do_test(Tutorial -25 "-25 is (-nan|nan|0)")
+do_test(Tutorial 0.0001 "0.0001 is 0.01")
+
