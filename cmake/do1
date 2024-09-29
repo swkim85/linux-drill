@@ -39,9 +39,21 @@ mkdir Step6_build ; cd Step6_build
 cmake --fresh ../Step6  ; cmake --build .
 ctest -VV -D Experimental
 
+# STEP7
+cd Step7
+cmake -B build 
+cd build ; make
+
+# STEP8
+cd Step8
+cmake -B build 
+cd build ; make
+
+
 
 # COMPLETE
-mkdir Complete_build ; cd Complete_build
-cmake ../Complete
-make
+cd Complete
+rm -rf build ; mkdir build ; cd build
+cmake -G Ninja ..
+ninja
 
