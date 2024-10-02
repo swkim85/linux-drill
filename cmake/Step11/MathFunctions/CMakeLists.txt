@@ -1,8 +1,10 @@
 add_library(MathFunctions MathFunctions.cxx)
 
-target_include_directories(MathFunctions
-                           INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
-                           )
+# step11
+target_include_directories(MathFunctions INTERFACE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<INSTALL_INTERFACE:include>
+  )
 
 option(USE_MYMATH "Use tutorial provided math implementation" ON)
 if(USE_MYMATH)
