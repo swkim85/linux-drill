@@ -60,3 +60,4 @@ install(TARGETS ${installable_libs}
         DESTINATION lib)
 # install include headers
 install(FILES MathFunctions.h DESTINATION include)
+

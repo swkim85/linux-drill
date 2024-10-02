@@ -49,6 +49,14 @@ cd Step8
 cmake -B build 
 cd build ; make
 
+# STEP9
+cd Step9
+cmake -B build 
+
+# STEP10
+cd Step10
+mkdir build ; cd build
+cmake ..
 
 
 # COMPLETE
