@@ -16,6 +16,7 @@ target_compile_options(tutorial_compiler_flags INTERFACE
   "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>"
 )
 
+
 # configure a header file to pass the version number only
 configure_file(TutorialConfig.h.in TutorialConfig.h)
 

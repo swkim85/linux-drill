@@ -21,11 +21,6 @@ if (USE_MYMATH)
 
   include(CheckCXXSourceCompiles)
 
-  # TODO 2: Use check_cxx_source_compiles with simple C++ code to verify
-  # availability of:
-  # * std::log
-  # * std::exp
-  # Store the results in HAVE_LOG and HAVE_EXP respectively.
   check_cxx_source_compiles("
     #include <cmath>
     int main() {
@@ -41,17 +36,6 @@ if (USE_MYMATH)
     }
   " HAVE_EXP)
 
-  # Hint: Sample C++ code which uses log:
-  # #include <cmath>
-  # int main() {
-  #   std::log(1.0);
-  #   return 0;
-  # }
-
-  # TODO 3: Conditionally on HAVE_LOG and HAVE_EXP, add private compile
-  # definitions "HAVE_LOG" and "HAVE_EXP" to the SqrtLibrary target.
-
-  # Hint: Use target_compile_definitions()
   if(HAVE_LOG AND HAVE_EXP)
     target_compile_definitions(SqrtLibrary
                                PRIVATE "HAVE_LOG" "HAVE_EXP"

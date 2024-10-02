@@ -11,7 +11,9 @@ target_include_directories(MathFunctions
 option(USE_MYMATH "Use tutorial provided math implementation" ON)
 if(USE_MYMATH)
 
-  target_compile_definitions(MathFunctions PRIVATE "USE_MYMATH")
+  # define the symbol stating we are using the declspec(dllexport) when
+  # building on windows
+  target_compile_definitions(MathFunctions PRIVATE "EXPORTING_MYMATH")
 
   include(MakeTable.cmake) # generates Table.h
 
@@ -34,6 +36,11 @@ endif()
 
 # link MathFunctions to tutorial_compiler_flags
 target_link_libraries(MathFunctions PUBLIC tutorial_compiler_flags)
+
+# define the symbol stating we are using the declspec(dllexport) when
+# building on windows
+target_compile_definitions(MathFunctions PRIVATE "EXPORTING_MYMATH")
+
 
 # install libs
 set(installable_libs MathFunctions tutorial_compiler_flags)
