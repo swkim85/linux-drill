@@ -1,26 +1,32 @@
+message(STATUS ">> start of MathFunctions")
+# step2.ex1
+# add_library(MathFunctions MathFunctions.cxx mysqrt.cxx)
+# step2.ex2
 add_library(MathFunctions MathFunctions.cxx)
 
-# state that anybody linking to us needs to include the current source dir
-# to find MathFunctions.h, while we don't.
+# step3.ex1
+message(STATUS "CMAKE_CURRENT_SOURCE_DIR ==> ${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(MathFunctions
-                           INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
-                           )
+    INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
+    )
 
-# should we use our own math functions
+# step2.ex2
 option(USE_MYMATH "Use tutorial provided math implementation" ON)
 if (USE_MYMATH)
   target_compile_definitions(MathFunctions PRIVATE "USE_MYMATH")
-
-  # library that just does sqrt
   add_library(SqrtLibrary STATIC
               mysqrt.cxx
               )
 
-  # link SqrtLibrary to tutorial_compiler_flags
+  # step2.ex2
+  #target_link_libraries(MathFunctions PRIVATE SqrtLibrary)
+
+  # step3.ex2
   target_link_libraries(SqrtLibrary PUBLIC tutorial_compiler_flags)
+  target_link_libraries(MathFunctions PRIVATE SqrtLibrary)
 
+  # step7
   include(CheckCXXSourceCompiles)
-
   check_cxx_source_compiles("
     #include <cmath>
     int main() {
@@ -35,24 +41,27 @@ if (USE_MYMATH)
       return 0;
     }
   " HAVE_EXP)
-
-  if(HAVE_LOG AND HAVE_EXP)
+  if (HAVE_LOG AND HAVE_EXP)
     target_compile_definitions(SqrtLibrary
-                               PRIVATE "HAVE_LOG" "HAVE_EXP"
-                               )
+       PRIVATE "HAVE_LOG" "HAVE_EXP"
+       )
   endif()
 
-  target_link_libraries(MathFunctions PRIVATE SqrtLibrary)
+
 endif()
 
-# link MathFunctions to tutorial_compiler_flags
+# step3.ex2
 target_link_libraries(MathFunctions PUBLIC tutorial_compiler_flags)
+message(STATUS "tutorial_compiler_flags ==> ${tutorial_compiler_flags}")
 
-# install libs
+# step5
 set(installable_libs MathFunctions tutorial_compiler_flags)
 if(TARGET SqrtLibrary)
   list(APPEND installable_libs SqrtLibrary)
 endif()
 install(TARGETS ${installable_libs} DESTINATION lib)
-# install include headers
 install(FILES MathFunctions.h DESTINATION include)
+message(STATUS "installable_libs ==> ${installable_libs}")
+
+message(STATUS "<< end of MathFunctions")
+

@@ -1,8 +1,7 @@
 #include "mysqrt.h"
 
 #include <iostream>
-#include <cmath>
-
+#include <cmath>  // step7
 
 namespace mathfunctions {
 namespace detail {
@@ -18,6 +17,7 @@ double mysqrt(double x)
   std::cout << "Computing sqrt of " << x << " to be " << result
             << " using log and exp" << std::endl;
 #else
+
   double result = x;
 
   // do ten iterations
@@ -35,3 +35,4 @@ double mysqrt(double x)
 }
 }
 }
+

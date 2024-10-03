@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
   const double inputValue = std::stod(argv[1]);
 
   // calculate square root
+  // step2
   //const double outputValue = sqrt(inputValue);
   const double outputValue = mathfunctions::sqrt(inputValue);
 
