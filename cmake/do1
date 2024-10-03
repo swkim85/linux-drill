@@ -50,13 +50,30 @@ cmake -B build
 cd build ; make
 
 # STEP9
-cd Step9
-cmake -B build 
+rm -rf Build ; cmake -B Build  -S Step9  -DUSE_MYMATH=ON ; cmake --build Build 
+cd Build ; cpack
+cpack --config CPackSourceConfig.cmake
+cpack -G ZIP -C Debug
 
 # STEP10
-cd Step10
-mkdir build ; cd build
-cmake ..
+rm -rf Build ; cmake -B Build  -S Step10  -DUSE_MYMATH=ON ; cmake --build Build 
+
+# STEP11
+rm -rf Build ; cmake -B Build  -S Step11  -DUSE_MYMATH=ON ; cmake --build Build 
+rm -rf /home/ubuntu/installdir
+cmake --install Build --prefix "/home/ubuntu/installdir"
+
+# STEP12
+cd Step12
+rm -rf debug release ; mkdir debug release
+cd debug 
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+cmake --build .
+cd ../release
+cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake --build .
+cd ..
+cpack --config MultiCPackConfig.cmake
 
 
 # COMPLETE
