@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
   if (fileOpen) {
     fout << "double sqrtTable[] = {" << std::endl;
     for (int i = 0; i < 10; ++i) {
-      fout << sqrt(static_cast<double>(i)) << "," << std::endl;
+      fout << sqrt(static_cast<double>(i)) << "," ;
     }
     // close the table with a zero
     fout << "0};" << std::endl;
