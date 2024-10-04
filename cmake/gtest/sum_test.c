@@ -3,6 +3,9 @@
 
 #include "sum.h"
 
+// TEST(TestSuiteName, TestName) {
+//   ... test body ...
+// }
 TEST(sum_test1, test1) {
   EXPECT_EQ(2, sum(1,1));
   EXPECT_EQ(0, sum(1,-1));

@@ -28,8 +28,8 @@ mkdir Step4_build ; cd Step4_build
 cmake --fresh ../Step4  ; cmake --build .
 
 # STEP5
-mkdir Step5_build ; cd Step5_build
-cmake --fresh ../Step5  ; cmake --build .
+cd Step5 ; mkdir build ; cd build ; cmake ..  ; cmake --build . ; ctest
+
 cmake --install . --prefix "/home/ubuntu/installdir"
 ctest -N
 ctest -VV

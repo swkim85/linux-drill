@@ -13,6 +13,5 @@ int main(int argc, char* argv[])
   outfile << "  return 0;" << std::endl;
   outfile << "}" << std::endl;
   outfile.close();
-
   return 0;
 }
