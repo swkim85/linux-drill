@@ -9,7 +9,6 @@ cmake --build .
 make -n
 ./Tutorial 10000
 
-
 # STEP2
 mkdir Step2_build ; cd Step2_build
 cmake --fresh ../Step2 -DUSE_MYMATH=OFF ; cmake --build .
@@ -75,10 +74,58 @@ cmake --build .
 cd ..
 cpack --config MultiCPackConfig.cmake
 
-
 # COMPLETE
 cd Complete
 rm -rf build ; mkdir build ; cd build
 cmake -G Ninja ..
 ninja
+
+
+
+
+# Imported Library 1
+cd MyExe
+rm -rf build ; mkdir build ; cd build
+cmake -G Ninja .. ; cmake --build .
+rm -rf $HOME/install_myexe
+cmake --install . --prefix $HOME/install_myexe
+tree $HOME/install_myexe
+
+cd Importing/
+export myexeloc=$HOME/install_myexe
+rm -rf build ; mkdir build ; cd build
+cmake -G Ninja .. --fresh ; cmake --build .
+./mynewexe
+
+# Imported Library 2
+cd MathFunctions
+mkdir build ; cd build
+cmake -G Ninja ..
+cmake --build .
+cmake --install . --prefix=$HOME/math
+tree $HOME/math
+
+cd Downstream/
+mkdir build ; cd build
+export CMAKE_PREFIX_PATH=$HOME/math
+cmake -G Ninja ..
+cmake --build . -v
+./myexe
+./myexe 100
+
+# Imported Library 3
+cd  MathFunctionsComponents
+mkdir build ; cd build
+cmake -G Ninja ..
+cmake --build .
+cmake --install . --prefix=$HOME/mathcomp
+tree $HOME/mathcomp
+
+cd DownstreamComponents/
+mkdir build ; cd build
+export CMAKE_PREFIX_PATH=$HOME/mathcomp
+cmake -G Ninja ..
+cmake --build .
+./myexe 100
+
 

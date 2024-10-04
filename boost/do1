@@ -1,4 +1,30 @@
 
 g++ -o today today.cpp -isystem /home/ubuntu/boost/include -L /home/ubuntu/boost/lib -lboost_date_time
 
+# GCC 14
+
+sudo apt install gcc-14 g++-14
+gcc-14 --version
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 \
+   --slave /usr/bin/g++ g++ /usr/bin/g++-14
+sudo update-alternatives --config gcc
+gcc --version
+
+
+# BOOST install
+
+wget  https://archives.boost.io/release/1.86.0/source/boost_1_86_0.tar.gz  
+tar zxf boost_1_86_0.tar.gz  && cd boost_1_86_0
+
+./bootstrap.sh 
+./b2 --help 
+./b2
+./b2  --prefix=$HOME/boost   install
+tree  $HOME/boost
+
+# examples
+
+rm -rf build ; mkdir build ; cd build 
+cmake -G Ninja ..
+cmake --build .
 
