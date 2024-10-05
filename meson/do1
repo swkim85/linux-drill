@@ -1,0 +1,42 @@
+
+# help
+
+meson --help
+meson setup --help
+
+# hello
+
+cd hello
+rm -rf builddir
+meson setup builddir
+meson setup builddir -v
+
+# CC=clang CXX=clang++ meson setup --reconfigure builddir
+# meson setup builddir --cc=clang --cxx=clang++
+sudo apt install lld
+CC=clang CC_LD=lld meson setup buildclang
+
+cd builddir
+ninja -v
+./demo
+
+# hellogtk
+
+sudo apt install libgtk-3-dev
+cd hellogtk
+meson setup builddir
+cd builddir
+ninja -v
+./demo
+
+# mylib
+
+rm -rf $HOME/mylib
+meson setup builddir
+meson setup builddir --prefix=$HOME/mylib
+cd builddir
+ninja
+#sudo ninja install
+ninja install
+tree  $HOME/mylib
+
