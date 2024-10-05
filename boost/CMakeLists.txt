@@ -22,7 +22,7 @@ message(STATUS "Boost_LIBRARIES ==> ${Boost_LIBRARIES}")
 #message(STATUS "---------------------------------")
 #print_all_variables()
 
-if (1) #{{
+if (0) #{{
 add_executable(today today.cpp)
 target_link_libraries(today ${Boost_LIBRARIES})
 
@@ -40,10 +40,13 @@ target_link_libraries(phone  ${Boost_LIBRARIES})
 
 add_executable(serial serial.cpp)
 target_link_libraries(serial  Boost::serialization)
-endif() #}}
 
 #add_executable(token1 token1.cpp)
 #target_link_libraries(token1  ${Boost_LIBRARIES})
+endif() #}}
+
+add_executable(mat1 mat1.cpp)
+target_link_libraries(mat1  )
 
 
 
