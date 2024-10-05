@@ -19,12 +19,10 @@ include_directories(${Boost_INCLUDE_DIRS})
 message(STATUS "Boost_INCLUDE_DIRS ==> ${Boost_INCLUDE_DIRS}")
 message(STATUS "Boost_LIBRARIES ==> ${Boost_LIBRARIES}")
 
-message(STATUS "---------------------------------")
-print_all_variables()
+#message(STATUS "---------------------------------")
+#print_all_variables()
 
-
-
-if (0) #{{
+if (1) #{{
 add_executable(today today.cpp)
 target_link_libraries(today ${Boost_LIBRARIES})
 
@@ -42,34 +40,10 @@ target_link_libraries(phone  ${Boost_LIBRARIES})
 
 add_executable(serial serial.cpp)
 target_link_libraries(serial  Boost::serialization)
-
-add_executable(gps  gps.cpp)
-target_link_libraries(gps   ${Boost_LIBRARIES})
-
-add_executable(token1 token1.cpp)
-target_link_libraries(token1  ${Boost_LIBRARIES})
-
-find_package(PNG REQUIRED)
-
-add_executable(gil1 gil1.cpp)
-target_link_libraries(gil1 ${Boost_LIBRARIES} PNG::PNG Boost::filesystem)
 endif() #}}
 
-set(OpenGL_GL_PREFERENCE GLVND)
-find_package(OpenGL REQUIRED)
-find_package(glfw3 REQUIRED) # sudo apt-get install libglfw3-dev
-find_package(assimp REQUIRED)
-#find_package(GLM REQUIRED)
+#add_executable(token1 token1.cpp)
+#target_link_libraries(token1  ${Boost_LIBRARIES})
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
-
-add_executable(render render.cpp)
-target_link_libraries(render
-  OpenGL::GL
-  glfw
-  assimp
-# ${ASSIMP_LIBRARIES}
-# ${GLM_LIBRARIES}
-)
 
 

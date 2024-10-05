@@ -1,6 +1,4 @@
 
-g++ -o today today.cpp -isystem /home/ubuntu/boost/include -L /home/ubuntu/boost/lib -lboost_date_time
-
 # GCC 14
 
 sudo apt install gcc-14 g++-14
@@ -9,7 +7,6 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140 \
    --slave /usr/bin/g++ g++ /usr/bin/g++-14
 sudo update-alternatives --config gcc
 gcc --version
-
 
 # BOOST install
 
