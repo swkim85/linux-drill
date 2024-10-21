@@ -1,0 +1,75 @@
+
+gcc -o busy_thread          busy_thread.c -lpthread -Wall -g
+gcc -o busy_thread_simple   busy_thread_simple.c -lpthread -Wall -g
+gcc -o busy_single   busy_single.c   -Wall -g
+gcc -o busy_simple   busy_simple.c   -Wall -g
+
+gcc -o reboot  reboot.c
+
+
+   # nice 값을 다르게 하여 3개의 프로세스를 백그라운드로 실행
+nice -n 0  ./busy_single  &
+nice -n 5  ./busy_single  &
+nice -n 10  ./busy_single  &
+
+cc -o cpulimit cpulimit.c -pthread -lrt  -Wall -O2 
+cc -o cpulimit cpulimit.c   -Wall -O2 
+./cpulimit -l 90 -f -v -- ./busy_simple
+
+
+#####################################
+# cgroup
+#####################################
+sudo apt install cgroup-tools
+
+#####################################
+# cgroup cpu subsystem
+#####################################
+
+mount | grep cgroup2 
+sudo mkdir /sys/fs/cgroup/mycgroup
+echo "+cpu" | sudo tee /sys/fs/cgroup/mycgroup/cgroup.subtree_control
+echo "50000 100000" | sudo tee /sys/fs/cgroup/mycgroup/cpu.max
+sudo cgexec -g cpu:mycgroup  ./busy_thread
+echo "70000 100000" | sudo tee /sys/fs/cgroup/mycgroup/cpu.max
+echo "max 1000000" | sudo tee /sys/fs/cgroup/mycgroup/cpu.max
+sudo cgdelete cpu:mycgroup
+ls /sys/fs/cgroup/mycgroup
+
+#####################################
+# cgroup io subsystem
+#####################################
+gcc -o write write.c
+
+sudo mkdir /sys/fs/cgroup/mycgroup
+echo "+io" | sudo tee /sys/fs/cgroup/mycgroup/cgroup.subtree_control
+
+#####################################
+# cgroup memory subsystem
+6.8.0-1015-aws --  failed
+#####################################
+
+gcc -o malloc1 malloc1.c
+
+메모리 오버 커밋을 해제한다.
+sudo sysctl -w vm.overcommit_memory=2
+
+export CGNAME=mycgroup2
+sudo mkdir /sys/fs/cgroup/$CGNAME 
+sudo cgcreate -g memory:$CGNAME
+echo $$ | sudo tee /sys/fs/cgroup/$CGNAME/cgroup.procs
+cat /proc/$$/cgroup  
+
+echo "+memory" | sudo tee /sys/fs/cgroup/$CGNAME/cgroup.subtree_control
+cat /sys/fs/cgroup/$CGNAME/cgroup.subtree_control
+echo "1024M" | sudo tee /sys/fs/cgroup/$CGNAME/memory.max
+cat /sys/fs/cgroup/$CGNAME/memory.max 
+
+cat /sys/fs/cgroup/$CGNAME/cgroup.procs
+cat /sys/fs/cgroup/cgroup.procs
+
+./malloc1 1000
+sudo cgexec -g memory:$CGNAME   ./malloc1 1000
+
+sudo cgdelete memory:$CGNAME 
+
