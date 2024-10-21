@@ -1,0 +1,5 @@
+[Unit]
+Description=Run mytimer service
+
+[Service]
+ExecStart=/opt/mytimer.sh

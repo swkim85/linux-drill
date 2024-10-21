@@ -1,0 +1,16 @@
+[Unit]
+Description=My Server
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Environment=ENV=production
+Environment="PORT=7070"
+ExecStart=/usr/bin/python3  /opt/my_server/my_server.py ${PORT}
+User=ubuntu
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target

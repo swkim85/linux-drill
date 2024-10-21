@@ -1,0 +1,66 @@
+
+#############################
+# systemd source code
+#############################
+$ git clone https://github.com/systemd/systemd.git 
+$ cd systemd 
+$ meson  setup  builddir
+$ cd builddir ;  ninja -v
+
+#############################
+# systemd services (my_server)
+#############################
+
+sudo rm -rf /opt/my_server/my_server.py \
+    /etc/systemd/system/my-server.service \
+    /etc/systemd/system/my-server.service.d 
+
+sudo  mkdir /opt/my_server
+sudo cp  my_server.py   /opt/my_server/my_server.py
+
+python3  /opt/my_server/my_server.py
+curl localhost:8080/hello
+
+sudo cp my-server.service  /etc/systemd/system/my-server.service
+
+sudo mkdir  /etc/systemd/system/my-server.service.d
+sudo cp  override.conf   /etc/systemd/system/my-server.service.d/override.conf
+
+sudo vi   /etc/systemd/system/my-server.service.d/override.conf
+curl localhost:7070/hello
+curl localhost:9090/hello
+
+sudo systemctl daemon-reload
+sudo systemctl start   my-server
+sudo systemctl stop    my-server
+sudo systemctl enable  my-server
+sudo systemctl status  my-server
+
+netstat -ant | egrep "7070|8080|9090"
+
+journalctl --no-pager -u my-server.service  | tail
+
+
+
+#############################
+# systemd services (mytimer)
+#############################
+
+sudo cp mytimer.sh  /opt/mytimer.sh
+sudo cp mytimer.service  /etc/systemd/system/mytimer.service
+sudo cp mytimer.timer    /etc/systemd/system/mytimer.timer
+
+systemd-analyze calendar "*:*:0/30"
+  Original form: *:*:0/30
+Normalized form: *-*-* *:*:00/30
+    Next elapse: Mon 2024-10-21 03:34:30 UTC
+       From now: 5s left
+
+sudo systemctl daemon-reload
+sudo systemctl start   mytimer.timer
+sudo systemctl status  mytimer.timer
+sudo systemctl enable mytimer.timer
+journalctl -fu mytimer.service
+
+
+
