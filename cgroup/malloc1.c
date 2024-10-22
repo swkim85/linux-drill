@@ -24,7 +24,7 @@ int main( int argc, char *argv[] ) {
      ptr[i] = i;
   }
   printf("%zu 바이트의 메모리가 성공적으로 할당되었습니다.\n", size);
-  sleep(100);
+  //sleep(100);
 
   free(ptr);
   printf("메모리가 해제되었습니다.\n");

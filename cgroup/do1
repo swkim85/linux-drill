@@ -3,15 +3,22 @@ gcc -o busy_thread          busy_thread.c -lpthread -Wall -g
 gcc -o busy_thread_simple   busy_thread_simple.c -lpthread -Wall -g
 gcc -o busy_single   busy_single.c   -Wall -g
 gcc -o busy_simple   busy_simple.c   -Wall -g
-
 gcc -o reboot  reboot.c
+gcc -o malloc1  malloc1.c
+gcc -o malloc2  malloc2.c
 
 
+#####################################
+# nice
+#####################################
    # nice 값을 다르게 하여 3개의 프로세스를 백그라운드로 실행
 nice -n 0  ./busy_single  &
 nice -n 5  ./busy_single  &
 nice -n 10  ./busy_single  &
 
+#####################################
+# cpulimit
+#####################################
 cc -o cpulimit cpulimit.c -pthread -lrt  -Wall -O2 
 cc -o cpulimit cpulimit.c   -Wall -O2 
 ./cpulimit -l 90 -f -v -- ./busy_simple
@@ -22,6 +29,32 @@ cc -o cpulimit cpulimit.c   -Wall -O2
 #####################################
 sudo apt install cgroup-tools
 
+sudo mkdir /sys/fs/cgroup/mycgroup
+sudo cgdelete cpu:mycgroup
+
+
+#####################################
+# cgroup auto start 
+#####################################
+
+sudo cp make_mycgroup.sh  /opt/make_mycgroup.sh
+sudo chmod 755 /opt/make_mycgroup.sh
+
+sudo cp mycgroup.service   /etc/systemd/system/mycgroup.service
+
+sudo systemctl daemon-reload 
+sudo systemctl enable  mycgroup.service
+#  reboot
+
+sudo systemctl status  mycgroup.service
+
+cat /sys/fs/cgroup/mycgroup/cpu.max
+
+journalctl --no-pager -u mycgroup.service  
+
+sudo systemctl disable mycgroup.service
+
+
 #####################################
 # cgroup cpu subsystem
 #####################################
@@ -31,6 +64,10 @@ sudo mkdir /sys/fs/cgroup/mycgroup
 echo "+cpu" | sudo tee /sys/fs/cgroup/mycgroup/cgroup.subtree_control
 echo "50000 100000" | sudo tee /sys/fs/cgroup/mycgroup/cpu.max
 sudo cgexec -g cpu:mycgroup  ./busy_thread
+
+cgget  -g cpu:mycgroup
+
+sudo cgset -r cpu.max="70000 100000" mycgroup
 echo "70000 100000" | sudo tee /sys/fs/cgroup/mycgroup/cpu.max
 echo "max 1000000" | sudo tee /sys/fs/cgroup/mycgroup/cpu.max
 sudo cgdelete cpu:mycgroup
@@ -49,27 +86,24 @@ echo "+io" | sudo tee /sys/fs/cgroup/mycgroup/cgroup.subtree_control
 6.8.0-1015-aws --  failed
 #####################################
 
-gcc -o malloc1 malloc1.c
+## disable memory over commit
+## sudo sysctl -w vm.overcommit_memory=2
 
-메모리 오버 커밋을 해제한다.
-sudo sysctl -w vm.overcommit_memory=2
-
-export CGNAME=mycgroup2
-sudo mkdir /sys/fs/cgroup/$CGNAME 
-sudo cgcreate -g memory:$CGNAME
-echo $$ | sudo tee /sys/fs/cgroup/$CGNAME/cgroup.procs
+sudo cgcreate -g memory:mycgroup
+echo $$ | sudo tee /sys/fs/cgroup/mycgroup/cgroup.procs
 cat /proc/$$/cgroup  
 
-echo "+memory" | sudo tee /sys/fs/cgroup/$CGNAME/cgroup.subtree_control
-cat /sys/fs/cgroup/$CGNAME/cgroup.subtree_control
-echo "1024M" | sudo tee /sys/fs/cgroup/$CGNAME/memory.max
-cat /sys/fs/cgroup/$CGNAME/memory.max 
+echo "+memory" | sudo tee /sys/fs/cgroup/mycgroup/cgroup.subtree_control
+cat /sys/fs/cgroup/mycgroup/cgroup.subtree_control
+echo "1024M" | sudo tee /sys/fs/cgroup/mycgroup/memory.max
+cat /sys/fs/cgroup/mycgroup/memory.max 
 
-cat /sys/fs/cgroup/$CGNAME/cgroup.procs
+cat /sys/fs/cgroup/mycgroup/cgroup.procs
 cat /sys/fs/cgroup/cgroup.procs
 
 ./malloc1 1000
-sudo cgexec -g memory:$CGNAME   ./malloc1 1000
+sudo cgexec -g memory:mycgroup   ./malloc1 1000
 
-sudo cgdelete memory:$CGNAME 
+sudo cgdelete memory:mycgroup 
+
 

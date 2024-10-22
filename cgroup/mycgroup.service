@@ -1,0 +1,12 @@
+[Unit]
+Description=Create custom cgroup
+After=sys-fs-cgroup.mount
+
+[Service]
+Type=oneshot
+ExecStart=/opt/make_mycgroup.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+
