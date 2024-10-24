@@ -106,4 +106,79 @@ sudo cgexec -g memory:mycgroup   ./malloc1 1000
 
 sudo cgdelete memory:mycgroup 
 
+#####################################
+# namespace
+#####################################
+
+### pid namespace
+sudo unshare --pid --fork --mount-proc /bin/bash  
+echo $$
+ps aux
+pstree -p
+sudo lsns -t pid
+
+### net namespace
+ip -br a
+sudo unshare --net /bin/bash
+ip -br a
+
+### mount namespace
+sudo unshare -m  /bin/bash
+mkdir /tmp/mount_test
+mount -t tmpfs tmpfs /tmp/mount_test
+df -h
+umount /tmp/mount_test
+rmdir /tmp/mount_test
+
+### uts namespace
+hostname
+sudo unshare --uts /bin/bash
+hostname new-hostname
+
+touch /tmp/uts_ns
+sudo unshare --uts=/tmp/uts_ns hostname test-host
+sudo nsenter --uts=/tmp/uts_ns  /bin/sh
+
+### user namespace
+grep CONFIG_USER_NS /boot/config-$(uname -r)
+sudo sysctl -w user.max_user_namespaces=10000
+unshare -U /bin/bash
+id
+
+### ipc namespace
+ipcmk -M 100
+ipcs  -m
+sudo unshare -i /bin/bash
+
+ipcmk -M 200
+ipcs -m
+
+### cgroup namespace
+sudo mkdir /sys/fs/cgroup/test
+echo 50000 | sudo tee /sys/fs/cgroup/test/cpu.max
+cat /sys/fs/cgroup/test/cpu.max
+
+sudo unshare -C /bin/bash
+
+systemd-cgls
+cat /proc/self/cgroup
+echo $$
+
+PID=???
+echo $PID | sudo tee /sys/fs/cgroup/test/cgroup.procs
+
+cat /proc/self/cgroup
+
+./busy_single
+cat /sys/fs/cgroup/test/cpu.stat
+
+### time namespace
+sudo unshare -T /bin/bash
+date 
+sudo date -s '1984-01-01 00:00:00'
+date
+echo $$
+sudo nsenter -t <PID> -T /bin/bash
+date
+
 

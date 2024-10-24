@@ -16,7 +16,7 @@ int main( int argc, char *argv[] ) {
   int i;
 
   for (i = 0; i < size; i++) {
-    printf("malloc 1MB memory ... %d\n", i);
+    printf("malloc 1MB memory ... %d\r", i);
     ptr[i] = (int *)malloc(size1m);
     if (ptr[i] == NULL) {
       printf("메모리 할당에 실패했습니다.\n");
@@ -27,7 +27,7 @@ int main( int argc, char *argv[] ) {
 
   // 할당된 메모리에 쓰기
   for (i = 0; i < size; i++) {
-    printf("write block ... %d\n", i);
+    printf("write block ... %d\r", i);
     for (size_t j = 0; j < size1m / sizeof(int); j++) {
       ptr[i][j] = j;
     }

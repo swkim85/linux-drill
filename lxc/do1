@@ -1,0 +1,7 @@
+
+gcc -o lxctest lxctest.c -llxc
+sudo ./lxctest
+
+gcc -o lxcstart lxcstart.c -llxc
+sudo ./lxcstart
+

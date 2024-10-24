@@ -1,0 +1,23 @@
+
+gcc -o unshare1  unshare1.c
+sudo ./unshare1
+
+#####################################
+# lxc
+#####################################
+sudo apt-get install lxc
+dpkg-query  -L lxc
+
+sudo lxc-create -n mycontainer -t ubuntu
+
+sudo lxc-start -n mycontainer -d
+
+sudo lxc-ls --fancy
+sudo lxc-attach -n mycontainer
+
+# cp   <file>   /var/lib/lxc/mycontainer/rootfs/<path>/<file>
+
+sudo lxc-stop -n mycontainer
+sudo lxc-destroy -n mycontainer
+
+

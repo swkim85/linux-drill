@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
   if len(sys.argv) > 1:
     port = int(sys.argv[1])
-    if (port <= 1024): port = default_serverPort
+    #if (port == nil): port = default_serverPort
     print("port : ", port)
 
   webServer = HTTPServer((hostName, port), MyServer)
