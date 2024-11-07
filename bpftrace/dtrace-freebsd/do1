@@ -1,0 +1,30 @@
+
+dtrace -l
+dtrace -l syscall:::
+
+dtrace -l | awk '{print $2}' | sort | uniq -c | sort -nr
+
+dtrace -n 'dtrace:::BEGIN { printf("Hello FreeBSD!\n"); }'
+
+dtrace -n 'syscall::open*:entry { printf("%s %s", execname, copyinstr(arg0)); }'
+dtrace -n 'syscall:::entry { printf("%s %s", execname, probefunc); }'
+dtrace -n 'dtrace:::BEGIN { cnt=0; } syscall:::entry { printf("%s %s", execname, probefunc); cnt++; if (cnt >= 10) exit(0); }'
+
+dtrace -s syscall_ten.d 
+
+dtrace -n 'syscall:::entry { @[execname, probefunc] = count(); }'
+dtrace -c 'cat /etc/passwd' -n 'syscall:::entry { @[execname, probefunc] = count(); }'
+dtrace -n 'syscall::read:return /execname == "sshd"/ { @ = quantize(arg0); }'
+dtrace  -s read_syscall_duration.d
+dtrace -s read_syscall_cputime.d
+dtrace -s probe_count_5sec.d
+dtrace -c './do.sh' -s stack.d
+
+
+ls /usr/local/share/dtrace-toolkit/*
+cat /usr/local/share/dtrace-toolkit/hotkernel
+cd /usr/local/share/dtrace-toolkit ; 
+./execsnoop -a
+
+
+

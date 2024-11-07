@@ -11,14 +11,62 @@ bpftrace -e 'BEGIN { printf("hello\n"); printf("world\n"); }'
 
 sudo bpftrace sleepers.bt 
 
-#######################################
-# DTrace (FreeBSD)
-#######################################
+
+# bpftrace  -e 'kprobe:do_nanosleep { printf("PID %d sleeping...\n", pid); }'
 
 
- dtrace -n 'syscall::read:entry { self->vts = vtimestamp; } \
-syscall::read:return /self->vts/ { \
-@["On-CPU us:"] = lquantize((vtimestamp - self->vts) / 1000, 0, 10000, 10); self->vts = 0; \
-}'
+clang -target bpf -c nanosleep.c  -o nanosleep.o
+/usr/src/linux-headers-6.8.0-1016-aws/tools/objtool/libsubcmd/sigchain.o
 
+
+
+
+--------------------------------------
+// trace_execve.c
+#include <linux/bpf.h>
+#include <bpf/bpf_helpers.h>
+
+SEC("kprobe/sys_execve")
+int trace_execve(struct pt_regs *ctx) {
+    char comm[16];
+    bpf_get_current_comm(&comm, sizeof(comm));
+    bpf_printk("execve called by process: %s\n", comm);
+    return 0;
+}
+
+char _license[] SEC("license") = "GPL";
+--------------------------------------
+
+sudo ln -s /usr/include/x86_64-linux-gnu/asm /usr/include/asm
+clang -O2 -target bpf -c trace_execve.c -o trace_execve.o
+sudo bpftool prog load trace_execve.o /sys/fs/bpf/trace_execve
+sudo bpftool prog
+# bpftool prog dump xlated id 492 opcodes
+   0: (bf) r6 = r10
+       bf a6 00 00 00 00 00 00
+   1: (07) r6 += -16
+       07 06 00 00 f0 ff ff ff
+   2: (bf) r1 = r6
+       bf 61 00 00 00 00 00 00
+   3: (b7) r2 = 16
+       b7 02 00 00 10 00 00 00
+   4: (85) call bpf_get_current_comm#252784
+       85 00 00 00 70 db 03 00
+   5: (18) r1 = map[id:118][0]+0
+       18 21 00 00 76 00 00 00 00 00 00 00 00 00 00 00
+   7: (b7) r2 = 30
+       b7 02 00 00 1e 00 00 00
+   8: (bf) r3 = r6
+       bf 63 00 00 00 00 00 00
+   9: (85) call bpf_trace_printk#-112560
+       85 00 00 00 50 48 fe ff
+  10: (b7) r0 = 0
+       b7 00 00 00 00 00 00 00
+  11: (95) exit
+       95 00 00 00 00 00 00 00
+
+ bpftool prog dump jited id 492 opcodes
+Error: No JIT disassembly support
+
+sudo echo 1 > /proc/sys/net/core/bpf_jit_enable
 

@@ -1,4 +1,11 @@
 
+dwarfdump  main_static
+
+gcc -g -c main.c -o main.o -gsplit-dwarf
+objdump -h --wide main.dwo
+
+
+
 gcc -Wall -pg -c test_gprof.c --save-temps 
 gcc -Wall -pg -c test_gprof_new.c --save-temps 
 gcc -o test_gprof  -pg test_gprof.o test_gprof_new.o
