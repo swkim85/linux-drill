@@ -56,7 +56,7 @@ sudo umount /tmp/overlay2/merged
 
 
 #############################
-# Docker
+# Docker image
 #############################
 
 sudo apt  install docker.io
@@ -106,11 +106,26 @@ tree  /var/lib/docker/overlay2/$cache_id6/diff
 tree  /var/lib/docker/overlay2/$cache_id7/diff
 
 
+#############################
+# Docker run
+#############################
 
+docker run --name my-nginx -d -p 8080:80  nginx
+docker ps -a
+docker inspect my-nginx
 
+docker inspect my-nginx | jq '.[].State.Pid'
+pid=`docker inspect my-nginx | jq '.[].State.Pid'`
+cat /proc/$pid/cgroup
+readlink /proc/$pid/ns/*
 
+pstree -tp | grep nginx
+curl localhost:8080
 
+docker inspect my-nginx | jq '.[].GraphDriver.Data.LowerDir' | tr -d '"' | tr ':' '\n'
 
+merged_dir=`docker inspect my-nginx | jq '.[].GraphDriver.Data.MergedDir' | tr -d '"'`
+cd $merged_dir
 
 
 
