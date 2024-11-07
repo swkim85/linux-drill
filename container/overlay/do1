@@ -1,0 +1,118 @@
+
+#############################
+# overlayFS
+#############################
+
+modprobe overlay
+lsmod | grep overlay
+
+grep CONFIG_OVERLAY_FS /boot/config-$(uname -r)
+
+cat /proc/filesystems | grep overlay
+
+
+sudo mkdir -p /lower  /upper /work  /merged
+sudo mount -t overlay -olowerdir=/lower,upperdir=/upper,workdir=/work  overlay  /merged
+df -h
+
+
+echo alice >> /lower/file1
+tree /lower /upper /work /merged
+
+echo bob >> /merged/file2
+tree /lower /upper /work /merged
+
+echo cat >> /merged/file1
+tree /lower /upper /work /merged
+
+cat /lower/file1 
+cat /upper/file1
+
+rm  /merged/file1
+ls -la /upper/file1
+
+sudo umount /merged
+
+
+
+mkdir -p /tmp/overlay2/{lower1,lower2,upper,work,merged}
+echo "This is lower1" > /tmp/overlay2/lower1/file1.txt
+echo "This is lower2" > /tmp/overlay2/lower2/file1.txt
+echo "This is lower2" > /tmp/overlay2/lower2/file2.txt
+echo "This is upper" > /tmp/overlay2/upper/file3.txt
+
+sudo mount -t overlay overlay \
+ -o lowerdir=/tmp/overlay2/lower1:/tmp/overlay2/lower2,upperdir=/tmp/overlay2/upper,workdir=/tmp/overlay2/work \
+ /tmp/overlay2/merged
+
+tree /tmp/overlay2/
+cat /tmp/overlay2/merged/file1.txt
+
+echo "New file in merged" >  /tmp/overlay2/merged/new_file.txt
+echo "Modified in merged" >> /tmp/overlay2/merged/file1.txt
+tree /tmp/overlay2/
+
+sudo umount /tmp/overlay2/merged
+
+
+#############################
+# Docker
+#############################
+
+sudo apt  install docker.io
+sudo docker version
+
+
+sudo docker search nginx
+sudo docker pull nginx
+docker images
+
+docker inspect nginx | jq '.[].RootFS.Layers'
+
+docker inspect nginx | jq '.[].RootFS.Layers[0]'
+low1sha=`docker inspect nginx | jq -r '.[].RootFS.Layers[0]'`
+low2sha=`docker inspect nginx | jq -r '.[].RootFS.Layers[1]'`
+low3sha=`docker inspect nginx | jq -r '.[].RootFS.Layers[2]'`
+low4sha=`docker inspect nginx | jq -r '.[].RootFS.Layers[3]'`
+low5sha=`docker inspect nginx | jq -r '.[].RootFS.Layers[4]'`
+low6sha=`docker inspect nginx | jq -r '.[].RootFS.Layers[5]'`
+low7sha=`docker inspect nginx | jq -r '.[].RootFS.Layers[6]'`
+echo $low1sha $low2sha $low3sha $low4sha $low5sha $low6sha $low7sha 
+
+chainid1=`echo $low1sha  | cut -d':' -f2`
+chainid2=`echo -n "sha256:$chainid1 $low2sha" | sha256sum | awk '{print $1}'`
+chainid3=`echo -n "sha256:$chainid2 $low3sha" | sha256sum | awk '{print $1}'`
+chainid4=`echo -n "sha256:$chainid3 $low4sha" | sha256sum | awk '{print $1}'`
+chainid5=`echo -n "sha256:$chainid4 $low5sha" | sha256sum | awk '{print $1}'`
+chainid6=`echo -n "sha256:$chainid5 $low6sha" | sha256sum | awk '{print $1}'`
+chainid7=`echo -n "sha256:$chainid6 $low7sha" | sha256sum | awk '{print $1}'`
+echo $chainid1 $chainid2 $chainid3 $chainid4 $chainid5 $chainid6 $chainid7
+
+cache_id1=`cat  /var/lib/docker/image/overlay2/layerdb/sha256/$chainid1/cache-id`
+cache_id2=`cat  /var/lib/docker/image/overlay2/layerdb/sha256/$chainid2/cache-id`
+cache_id3=`cat  /var/lib/docker/image/overlay2/layerdb/sha256/$chainid3/cache-id`
+cache_id4=`cat  /var/lib/docker/image/overlay2/layerdb/sha256/$chainid4/cache-id`
+cache_id5=`cat  /var/lib/docker/image/overlay2/layerdb/sha256/$chainid5/cache-id`
+cache_id6=`cat  /var/lib/docker/image/overlay2/layerdb/sha256/$chainid6/cache-id`
+cache_id7=`cat  /var/lib/docker/image/overlay2/layerdb/sha256/$chainid7/cache-id`
+echo $cache_id1 $cache_id2 $cache_id3 $cache_id4 $cache_id5 $cache_id6 $cache_id7 
+
+tree -d /var/lib/docker/overlay2/$cache_id1/diff
+tree -d /var/lib/docker/overlay2/$cache_id2/diff
+tree -d /var/lib/docker/overlay2/$cache_id3/diff
+tree  /var/lib/docker/overlay2/$cache_id4/diff
+tree  /var/lib/docker/overlay2/$cache_id5/diff
+tree  /var/lib/docker/overlay2/$cache_id6/diff
+tree  /var/lib/docker/overlay2/$cache_id7/diff
+
+
+
+
+
+
+
+
+
+
+
+

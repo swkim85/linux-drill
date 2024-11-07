@@ -1,3 +1,24 @@
 
+bpftrace --version
+sudo bpftrace -l | wc -l 
+
+sudo bpftrace -l 'tracepoint:syscalls:sys_enter_*'  
+sudo bpftrace -l '*tcp*'  
+
+sudo bpftrace -lv 'tracepoint:syscalls:sys_enter_open'
+
+bpftrace -e 'BEGIN { printf("hello\n"); printf("world\n"); }'
+
 sudo bpftrace sleepers.bt 
+
+#######################################
+# DTrace (FreeBSD)
+#######################################
+
+
+ dtrace -n 'syscall::read:entry { self->vts = vtimestamp; } \
+syscall::read:return /self->vts/ { \
+@["On-CPU us:"] = lquantize((vtimestamp - self->vts) / 1000, 0, 10000, 10); self->vts = 0; \
+}'
+
 

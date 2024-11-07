@@ -1,4 +1,1 @@
-tracepoint:syscalls:sys_enter_nanosleep
-{
-  printf("%s is sleeping.\n", comm);
-}
+tracepoint:syscalls:sys_enter_nanosleep { printf("%s is sleeping.\n", comm); }
