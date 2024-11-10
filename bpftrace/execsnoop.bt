@@ -1,0 +1,13 @@
+#!/usr/bin/bpftrace
+
+BEGIN
+{
+  printf("%-25s %-5s %s %s\n","TIME", "PID", "USERNAME", "ARGS");
+}
+
+tracepoint:syscalls:sys_enter_execve
+{
+  time("%F %H:%M:%S      ");
+  printf("%-6d %-10s", pid, username);
+  join(args->argv);
+}
