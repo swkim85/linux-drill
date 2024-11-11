@@ -4,6 +4,18 @@
 linux-drill
 ==============
 
+Directory
+
+* asm : x86 assembler
+* share : static and shared linking
+* debugging: ptrace and debugging
+* profile : profiling tech.
+* simd : SIMD programming
+* opti : optimization
+* openmp : pthread and openmp
+* openacc : openacc
+* rocm : rocm hip
+
 .. csv-table:: Series
    :header: "Title", "ISBN", "Date"
    :widths: 15, 10, 30
