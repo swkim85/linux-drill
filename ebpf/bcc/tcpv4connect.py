@@ -73,8 +73,7 @@ int kretprobe__tcp_v4_connect(struct pt_regs *ctx)
 b = BPF(text=bpf_text, debug=False)
 
 # header
-print("%-6s %-12s %-16s %-16s %-4s" % ("PID", "COMM", "SADDR", "DADDR",
-    "DPORT"))
+print("%-6s %-12s %-16s %-16s %-4s" % ("PID", "COMM", "SADDR", "DADDR", "DPORT"))
 
 def inet_ntoa(addr):
   dq = b''
