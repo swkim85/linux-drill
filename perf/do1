@@ -1,0 +1,10 @@
+
+gcc -o perf_example perf_example.c
+sudo ./perf_example
+
+# sudo sysctl kernel.perf_event_paranoid
+kernel.perf_event_paranoid = 4
+
+# sudo sysctl -w kernel.perf_event_paranoid=-1
+
+
