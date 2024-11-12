@@ -1,1 +1,0 @@
-rm -f a minimal minimal.bpf.o minimal.o minimal.skel.h minimal_legacy minimal_legacy.bpf.o minimal_legacy.o minimal_legacy.skel.h minimal_legacy.tmp.bpf.o minimal_ns minimal_ns.bpf.o minimal_ns.o minimal_ns.skel.h
