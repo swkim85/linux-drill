@@ -1,0 +1,8 @@
+# 피보나치 수열(fibonacci sequence)에서 x번째의 값을 구함 fib[1]=1, fib[2]=1, fib[3]=2,...
+def fib(x)
+  if x < 3 then
+    1
+  else
+    fib(x-1)+fib(x-2)
+# This expression will compute the 40th number.
+fib(40)

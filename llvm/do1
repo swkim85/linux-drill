@@ -9,38 +9,45 @@ llvm-as  helloworld.ll  -o helloworld.bc
 llvm-dis  helloworld.bc  -o helloworld.ll
 llc  helloworld.bc  -o helloworld.s
 
+# gcc vs clang
+gcc -Wall ex1.c
+clang -Wall ex1.c
+
+gcc   -O2 -S ex4.c -o ex4.s.gcc13
+clang -O2 -S ex4.c -o ex4.s.clang18
 
 clang -emit-llvm -S ex1.c  -o ex1.ll
 vi -d helloworld.ll ex1.ll 
-clang -Xclang -ast-dump -fsyntax-only  helloworld.c
 
-# Lexer
+# tut1: Lexer
 
 clang++ -g -O3 tut1.cpp  -o tut1
+clang -Xclang -ast-dump -fsyntax-only  helloworld.c
 
-# Parser and AST
+# tut2: Parser and AST
+# tut2: IR
 
 clang++ -g -O3 tut2.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core` -o tut2
 
 clang -Xclang -ast-dump -fsyntax-only test-ast.cc
 
 
-# Optimization, JIT
+# tut3: Optimization, JIT
 
 clang++ -g -O3 tut3.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` -o tut3
 
-# control flow  if/then/else for
+# tut5: control flow  if/then/else for
 
 gcc -c -fpic star.c
 gcc -shared -o libstar.so star.o
 
-clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` \
-   tut5.cpp -o tut5 -lstar -L.
+clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` tut5.cpp -o tut5 -lstar -L.
 
 export LD_LIBRARY_PATH=.
 ./tut5
+./tut5  < star.kal
 
-# user-defined operator
+# tut6: user-defined operator
 
 clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` \
    tut6.cpp -o tut6 -lstar -L.
@@ -51,14 +58,13 @@ export LD_LIBRARY_PATH=.
 ./tut6 < mandelbrot.kal
 
 
-# variables
+# tut7: variables
 
-clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` -lstar -L. \
-   tut7.cpp -o tut7 
+clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` -lstar -L.  tut7.cpp -o tut7 
 export LD_LIBRARY_PATH=.
 ./tut7
 
-# compile to object code
+# tut8: compile to object code
 
 llc -march=x86 -mattr=help
 
@@ -70,7 +76,7 @@ file output.o
 clang++ average_main.cpp output.o -o average_main 
 ./average_main
 
-# debug info
+# tut9: debug info
 
 clang++ -g -O3 `llvm-config --cxxflags --ldflags --system-libs --libs core orcjit native` \
    tut9.cpp -o tut9 

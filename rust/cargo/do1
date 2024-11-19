@@ -1,0 +1,11 @@
+
+cargo new hello_cargo  
+cd  hello_cargo
+cargo add stack-stack
+
+more Cargo.toml
+
+cargo build
+
+cargo run
+
