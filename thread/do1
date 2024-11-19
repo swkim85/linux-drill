@@ -1,42 +1,74 @@
 
-$ gcc -g  -o thread1  thread1.c   -pthread
-$ clang -g  -o thread1  thread1.c   -pthread
-$ ./thread1
+###################################
+# pthread
+###################################
+gcc -g  -o thread1  thread1.c   -pthread
+clang -g  -o thread1  thread1.c   -pthread
+./thread1
 Hello message from a thread
 main program exit.
 
 
-$ gcc -g  -o  thread2  thread2.c  -pthread
-$ ./thread2
+gcc -g  -o  thread2  thread2.c  -pthread
+./thread2
 main program exit.
 Hello message from a thread  <-- main thread 가 종료된 이후에는 출력되지 않음
 
 
-$ gcc -g  -o  thread3  thread3.c  -pthread 
-$ gcc -g  -o  thread3  thread3.c  -pthread -DDETACH
-$ gcc -g  -o  thread3  thread3.c  -pthread -DJOIN
-$ ./thread3
+cat /proc/sys/vm/overcommit_memory
+echo 2 | sudo tee /proc/sys/vm/overcommit_memory
+
+gcc -g  -o  thread3  thread3.c  -pthread 
+gcc -g  -o  thread3  thread3.c  -pthread -DDETACH
+gcc -g  -o  thread3  thread3.c  -pthread -DJOIN
+./thread3
+
+ps -eLf | egrep "UID|thread3"
+pmap -x  $(ps ax | grep thread3 | head -n 1 | awk '{print $1}')
+
+gcc -g  -o  thread4  thread4.c  -pthread
+./thread4
+
+###################################
+# mutex
+###################################
+
+gcc -g  -o  mutex1  mutex1.c -pthread  
+./mutex1
+
+gcc -g  -o  mutex2  mutex2.c -pthread
+./mutex2
+
+gcc -g  -o  deadlock  deadlock.c -pthread
+./deadlock
+
+gcc -g  -o  mutex3  mutex3.c -pthread
+./mutex3
+
+###################################
+# thread debugging
+###################################
+
+gcc -g -o thsleep  thsleep.c  -pthread
+./thsleep
+
+gdb -ex "break main" -ex "run" -ex "set pagination off"  ./thsleep
 
 
-$ gcc -g  -o  thread4  thread4.c  -pthread
-$ ./thread4
+###################################
+# condition variable
+###################################
 
-gcc -o rdtsc.o  -c rdtsc.c
-
-
+gcc -g -o signalwait  signalwait.c -pthread
+./signalwait
 
 gcc -g  -o  procon  procon.c  -pthread
+./procon
 
+gdb -ex "break main" -ex "run" -ex "set pagination off"  signalwait
 
+gcc -g -o rwlock      rwlock.c -pthread
+./rwlock
 
-
-
-gcc -g -fopenmp -o scope scope.c --save-temps
-./scope
-
-gcc -g -fopenmp -o loop  loop.c --save-temps
-./loop
-
-gcc -g -o futex_wake futex_wake.c --save-temps
 
 
