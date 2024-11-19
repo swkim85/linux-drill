@@ -84,7 +84,7 @@ gcc -g -fopenmp -o loop  loop.c
 ./loop
 
 ##################################
-# etc
+# matrix multiply
 ##################################
 
 gcc -g -fopenmp -o matmul  matmul.c -DN=100
