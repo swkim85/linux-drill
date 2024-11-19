@@ -1,9 +1,23 @@
 
+###################################
+# install fftw
+###################################
+
+wget https://www.fftw.org/fftw-3.3.10.tar.gz  
+tar zxvf fftw-3.3.10.tar.gz
+cd fftw-3.3.10/
+./configure --prefix=/usr/local/fftw
+make ; sudo make install
+
 gcc -c fftw_example.c -I/usr/local/fftw/include
 gcc -o fftw_example  fftw_example.o -lfftw3 -lm -L/usr/local/fftw/lib
+./fftw_example
+
 
 gcc -c fft1.c -I/usr/local/fftw/include
 gcc -o fft1 fft1.o -lfftw3 -lm -L/usr/local/fftw/lib
+./fft1
+
 
 gcc -g -o complex_addition complex_addition.c -lm --save-temps
 
