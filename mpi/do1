@@ -1,0 +1,11 @@
+
+sudo apt install libopenmpi-dev   openmpi-bin
+
+mpicc -o hello hello.c
+
+mpirun -n <process_count> ./hello
+
+$ mpirun -n 2 ./hello
+Hello world from rank 0 out of 2 processors
+Hello world from rank 1 out of 2 processors
+
