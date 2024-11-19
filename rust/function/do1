@@ -1,0 +1,8 @@
+
+rustc add1.rs ; ./add1
+rustc tuple.rs ; ./tuple
+rustc two_values.rs ; ./two_values
+
+rustc slices.rs ; ./slices
+
+rustc variable_args.rs ; ./variable_args

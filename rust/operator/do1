@@ -1,0 +1,4 @@
+
+rustc range.rs ; ./range
+rustc range1.rs
+rustc range2.rs

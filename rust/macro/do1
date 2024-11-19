@@ -1,0 +1,4 @@
+
+rustc hello.rs ; ./hello
+rustc addtwo.rs ; ./addtwo
+
