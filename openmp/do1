@@ -4,12 +4,14 @@
 # intro
 ##################################
 gcc -g -fopenmp -o test1 test1.c 
+./test1
 
 gcc -o rdtsc.o  -c rdtsc.c
 
 export OMP_NUM_THREADS=2
 gcc -g -fopenmp -o hello_omp  hello_omp.c 
 gcc -g -fopenmp -o hello_omp  hello_omp.c --save-temps
+./hello_omp
 
 gdb ./hello_omp
 
@@ -26,6 +28,7 @@ OMP_NUM_THREADS=4   ./hello_omp
 export OMP_NUM_THREADS=2
 gcc -g -fopenmp -o private private.c 
 gcc -g -fopenmp -o a a.c  rdtsc.o --save-temps
+./private
 
 gcc -g -fopenmp -o private2 private2.c 
 gcc -g -fopenmp -o private3 private3.c 
