@@ -126,8 +126,9 @@ docker inspect my-nginx | jq '.[].GraphDriver.Data.LowerDir' | tr -d '"' | tr ':
 
 merged_dir=`docker inspect my-nginx | jq '.[].GraphDriver.Data.MergedDir' | tr -d '"'`
 cd $merged_dir
+cd usr/share/nginx/html
+vi index.html
 
-
-
+curl localhost:8080
 
 
