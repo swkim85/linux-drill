@@ -1,5 +1,7 @@
 
 
+sudo apt-get install gcc-multilib g++-multilib
+
 #################################
 # tracer1
 #################################
@@ -41,9 +43,9 @@ file tracee_asm64
 ./tracer2 tracee_asm64
 
 
-
-#===================================================================
+#################################
 # 32비트
+#################################
 vi tracee_break32.asm
 
 nasm -f elf  -o tracee_break32.o  tracee_break32.asm
@@ -95,6 +97,8 @@ Breakpoint 1, 0x08049000 in ?? ()
 
 export ADDRESS=0x8049016
 
+
+
 gcc -m32 -o tracer3 -DTARGETADDRESS=$ADDRESS  tracer3.c
 ./tracer3  tracee_break_asm32
 
@@ -118,9 +122,9 @@ world!
 [9067] parent terminate.
 
 
-
-#===================================================================
+#################################
 # 64비트
+#################################
 
 nasm -f elf64 -o tracee_break64.o  tracee_break64.asm
 ld  tracee_break64.o  -o  tracee_break64
