@@ -1,0 +1,4 @@
+
+
+env = Environment()
+env.Program('hello.exe', 'hello.c')

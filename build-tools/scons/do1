@@ -1,0 +1,13 @@
+
+https://scons.org/
+
+
+scons --version
+
+# build
+scons -C hello -j 4
+
+# clean
+scons -C hello -c
+
+
