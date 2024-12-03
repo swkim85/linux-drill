@@ -1,0 +1,7 @@
+
+#import SCons
+
+SetOption("silent", 1)
+print (f"this is module2")
+
+    

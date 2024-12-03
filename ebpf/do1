@@ -1,18 +1,62 @@
 
+디렉터리가 존재하면 BPF 가 활성화 된것임
+sudo ls /sys/fs/bpf
+
+커널 설정에 CONFIG_BPF 를 확인
+grep CONFIG_BPF /boot/config-$(uname -r) #
+
+bpftrace 패키지
+dpkg-query -L bpftrace
+
+ls /usr/sbin/*.bt
+tcpconnect.bt   TCP 연결 시도를 추적
+tcpaccept.bt    수락된 TCP 연결을 추적
+bashreadline.bt bash 커맨트를 추적
+biolatency.bt   block I/O 의 지연시간 분포를 측정
+opensnoop.bt    파일 open() 시스템 호출을 추적
+vfscount.bt     VFS 동작을 추적
+cpuwalk.bt      CPU 사용량을 샘플링하여 각 CPU 코어 활용도를 보여준다
+
+bpftrace sleepers.bt 
+
 bpftrace --version
-sudo bpftrace -l | wc -l 
+bpftrace v0.20.2
 
-sudo bpftrace -l 'tracepoint:syscalls:sys_enter_*'  
-sudo bpftrace -l '*tcp*'  
 
+프로브 조회
+bpftrace -l 
+bpftrace -l 'tracepoint:syscalls:sys_enter_*'
+bpftrace -l 'kprobe:*nanosleep'
+bpftrace -l '*tcp*'  
+bpftrace -l 'interval:*'  
+
+상세정보
 sudo bpftrace -lv 'tracepoint:syscalls:sys_enter_open'
+
+
+kprobe
+bpftrace -e 'BEGIN { printf("Current pid=%d cgroupID=%d\n", pid, cgroup); exit() }'
+
+vfs_write 커널프로브 추적하기 (해당 cgroup만 해당)
+bpftrace -e 'kprobe:vfs_write /cgroup==53322/ { printf("%s opened %s\n", comm, str(arg1)); }'
+
+sys_read() 커널 함수의 리턴값을 수집하여 log2 히스토그램으로 출력 (해당 cgroup만)
+bpftrace -e 'kretprobe:vfs_read /cgroup==53322/ { @bytes = hist(retval); }'
 
 bpftrace -e 'BEGIN { printf("hello\n"); printf("world\n"); }'
 
-sudo bpftrace sleepers.bt 
+bpftrace  -e 'kprobe:do_nanosleep { printf("PID %d sleeping...\n", pid); }'
 
 
-# bpftrace  -e 'kprobe:do_nanosleep { printf("PID %d sleeping...\n", pid); }'
+tracepoint 프로브
+tracepoint:syscalls:sys_enter_openat 
+gcc -o openat openat.c
+./openat  /etc/group
+
+export targetpid=37773 /pid==$targetpid/ 는 predicate로 필터기능을 함
+bpftrace -e 'tracepoint:syscalls:sys_enter_openat /pid=='"$targetpid"'/
+   { printf("%s %s\n", comm, str(args.filename)); }'
+
 
 
 clang -target bpf -c nanosleep.c  -o nanosleep.o
