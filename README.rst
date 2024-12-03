@@ -5,16 +5,20 @@ linux-drill
 ==============
 
 Directory
-
 * asm : x86 assembler
 * share : static and shared linking
 * debugging: ptrace and debugging
-* profile : profiling tech.
-* simd : SIMD programming
+* profile : linux profiling
+* simd : simd programming
 * opti : optimization
 * openmp : pthread and openmp
 * openacc : openacc
-* rocm : rocm hip
+* rocm : amd rocm hip gpu
+* llvm : llvm tutorial
+* build-tools: cmake build tool
+* container: linux container
+* ebpf: linux eBPF
+
 
 .. csv-table:: Series
    :header: "Title", "ISBN", "Date"
