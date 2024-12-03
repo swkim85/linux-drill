@@ -26,13 +26,13 @@ bpftrace v0.20.2
 프로브 조회
 bpftrace -l 
 bpftrace -l 'tracepoint:syscalls:sys_enter_*'
+bpftrace -l 'kprobe:*'
 bpftrace -l 'kprobe:*nanosleep'
 bpftrace -l '*tcp*'  
 bpftrace -l 'interval:*'  
 
 상세정보
 sudo bpftrace -lv 'tracepoint:syscalls:sys_enter_open'
-
 
 kprobe
 bpftrace -e 'BEGIN { printf("Current pid=%d cgroupID=%d\n", pid, cgroup); exit() }'
@@ -46,7 +46,10 @@ bpftrace -e 'kretprobe:vfs_read /cgroup==53322/ { @bytes = hist(retval); }'
 bpftrace -e 'BEGIN { printf("hello\n"); printf("world\n"); }'
 
 bpftrace  -e 'kprobe:do_nanosleep { printf("PID %d sleeping...\n", pid); }'
+bpftrace  -e 'kprobe:ksys_chroot{ printf("PID %d chroot\n", pid); }'
 
+syscall 프로브
+sudo bpftrace sys_enter_chroot.bt
 
 tracepoint 프로브
 tracepoint:syscalls:sys_enter_openat 

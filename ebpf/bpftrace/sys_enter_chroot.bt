@@ -1,0 +1,7 @@
+#!/usr/bin/env bpftrace
+
+tracepoint:syscalls:sys_enter_chroot
+{
+  printf("PID %d (%s) called chroot with path: %s\n", 
+         pid, comm, str(args->filename));
+}
