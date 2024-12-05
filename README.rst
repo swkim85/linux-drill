@@ -32,5 +32,5 @@ Directory
    "AMD GPU를 활용한 HIP 프로그래밍", "`978-89-294-1716-1 <https://www.nl.go.kr/seoji/contents/S80100000000.do?schType=simple&schStr=978-89-294-1716-1>`_", "2024.10.1."
    "LLVM 튜토리얼", "`978-89-294-1717-8 <https://www.nl.go.kr/seoji/contents/S80100000000.do?schType=simple&schStr=978-89-294-1717-8>`_", "2024.10.1."
    "CMake 빌드툴 튜토리얼", "`978-89-294-1734-5 <https://www.nl.go.kr/seoji/contents/S80100000000.do?schType=simple&schStr=978-89-294-1734-5>`_", "2024.11.1."
-   "리눅스 컨테이너 기술 분석", "978-89-294-1798-7", "2024.12.1."
+   "리눅스 컨테이너 기술 분석", "`978-89-294-1798-7 <https://www.nl.go.kr/seoji/contents/S80100000000.do?schType=simple&schStr=978-89-294-1798-7>`_", "2024.12.1."
    "리눅스 eBPF 기술 분석", "978-89-294-1799-4", "2024.12.1."
