@@ -1,0 +1,7 @@
+
+./riscv64-unknown-elf-g++ -o hello hello.cpp
+
+$ file hello
+hello: ELF 64-bit LSB executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), statically linked, with debug_info, not stripped
+
+
