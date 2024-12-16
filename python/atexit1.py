@@ -6,6 +6,10 @@ def exit_function1():
 def exit_function2():
   print("프로그램이 종료됩니다! 2")
 
+@atexit.register
+def exit_function3():
+  print("프로그램이 종료됩니다! 3")
+
 atexit.register(exit_function1)
 atexit.register(exit_function2)
 
