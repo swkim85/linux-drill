@@ -1,0 +1,33 @@
+
+
+gcc -o ex1 ex1.c
+gem5 simple.py --target ex1
+gem5 simple.py --target cpuid
+
+gcc -o foo.o -c foo.c
+gcc -c -Wall -Werror -fpic foo.c
+gcc -shared -o libfoo.so foo.o
+gcc -g -o mainfoo.o -c mainfoo.c
+gcc -o mainfoo  mainfoo.o -L. -lfoo
+export LD_LIBRARY_PATH=. ; ./mainfoo
+
+
+gem5  se-shared-foo.py
+gem5  se-shared-ls.py
+
+
+gcc -g -o cpuid cpuid.c
+./cpuid
+gem5 simple.py --target cpuid
+gem5 se-shared-cpuid.py
+
+
+
+
+
+export GEM5_RESOURCE_JSON=cpuid.json
+echo $GEM5_RESOURCE_JSON
+
+gcc -o pattern pattern.c
+export GEM5_RESOURCE_JSON=pattern.json
+

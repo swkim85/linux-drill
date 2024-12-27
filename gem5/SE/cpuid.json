@@ -1,0 +1,9 @@
+{
+  "resources": {
+    "test-binary": {
+      "type": "binary",
+      "architecture": "X86",
+      "url": "file:///home/ubuntu/coding-drill/gem5/cpuid"
+    }
+  }
+}

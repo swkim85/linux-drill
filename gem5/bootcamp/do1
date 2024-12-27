@@ -1,0 +1,8 @@
+
+
+gcc -o 00-SE-hello-world  00-SE-hello-world.c
+
+gcc -o pattern pattern.c
+export GEM5_RESOURCE_JSON=pattern.json
+
+

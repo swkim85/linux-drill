@@ -1,0 +1,53 @@
+
+virtualenv ~/venv
+source   ~/venv/bin/activate
+
+
+# scons
+wget https://github.com/SCons/scons/archive/refs/tags/4.8.1.tar.gz
+tar zxf 4.8.1.tar.gz ;  cd scons-4.8.1 
+python -m pip install .
+
+# gem5 compile
+wget https://github.com/gem5/gem5/archive/refs/tags/v24.0.tar.gz   
+tar zxf v24.0.tar.gz    ;  mv  gem5-24.0  gem5 ; cd gem5
+pip install -r requirements.txt
+
+(env)$ 
+scons  build/X86/gem5.opt   -j$(nproc)  --gprof
+
+alias gem5='~/gem5/build/X86/gem5.opt' 
+
+
+gem5  configs/learning_gem5/part1/simple.py
+gem5  -re configs/learning_gem5/part1/simple.py
+ls m5out/
+more m5out/simout.txt 
+
+# SE mode
+gem5 --debug-help
+gem5 --debug-help | grep Event
+gem5 --debug-flags=AddrRanges   configs/learning_gem5/part1/simple.py
+
+
+# FS mode
+gem5 configs/example/gem5_library/x86-ubuntu-run.py
+m5term localhost 3456 
+
+# running gem5
+cd SE
+gem5 hello-world.py
+
+
+# NPB benchmark
+kvm-ok
+echo 0 | sudo tee /proc/sys/kernel/perf_event_paranoid
+gem5  configs/example/gem5_library/x86-npb-benchmarks.py --benchmark npb-bt-a  --ticks 500000000000
+cat   m5out/board.pc.com_1.device 
+cd ~/.cache/gem5/
+
+
+
+
+
+
