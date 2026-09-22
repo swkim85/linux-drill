@@ -23,7 +23,7 @@ Directory
 
 .. csv-table:: Series
    :header: "Title", "ISBN", "Authors", "Date"
-   :widths: 15, 10, 30
+   :widths: 15, 10, 30, 30
 
    "X86_64 어셈블리 프로그래밍 기초", "`978-89-294-1309-5 <https://www.nl.go.kr/seoji/contents/S80100000000.do?schType=simple&schStr=978-89-294-1309-5>`_", "김상완,오광진", "2022.6.1."
    "리눅스 프로세스 디버깅 및 성능 분석도구 기초", "`978-89-294-1694-2 <https://www.nl.go.kr/seoji/contents/S80100000000.do?schType=simple&schStr=978-89-294-1694-2>`_", "김상완, 정기문", "2024.6.1."
